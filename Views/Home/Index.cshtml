@@ -1,0 +1,34 @@
+﻿@model Portfolio.Models.HomeIndexViewModel
+
+
+<div class="home-hero" style="
+    background: url('@Model.HeroBackgroundUrl') center/cover no-repeat !important;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.7);
+    position: relative;
+">
+    <div style="
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+    "></div>
+
+    <div class="text-center" style="position: relative; z-index: 1;">
+        <h1 class="display-3 fw-bold">@Model.Name</h1>
+        <p class="lead mt-3">@Model.Role z @Model.YearsOfExperience-letnim doświadczeniem.</p>
+
+        <p class="mt-4">Technologie, z których korzystam na co dzień:</p>
+        <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+            @foreach (var tech in Model.MainTechnologies)
+            {
+                <span class="badge bg-secondary">@tech</span>
+            }
+        </div>
+
+        <a asp-controller="Home" asp-action="About" class="btn btn-secondary btn-lg">O mnie</a>
+    </div>
+</div>

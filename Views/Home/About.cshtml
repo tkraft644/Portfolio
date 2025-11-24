@@ -1,0 +1,52 @@
+@model Portfolio.Models.AboutViewModel
+
+@{
+    ViewData["Title"] = "O mnie i doświadczenie";
+}
+
+<div class="page-bg">
+    <div class="container py-5" style="max-width: 900px;">
+        <div class="vs-panel">
+
+            <h1 class="mb-4">O mnie</h1>
+            <p>@Model.Bio</p>
+
+            <h3 class="mt-4">Zainteresowania</h3>
+            <ul>
+                @foreach (var hobby in Model.Hobbies)
+                {
+                    <li>@hobby</li>
+                }
+            </ul>
+
+            <hr class="my-5" />
+
+            <h2 class="mb-4">Doświadczenie</h2>
+
+            @foreach (var exp in Model.Experience)
+            {
+                <div class="vs-experience-item mb-4 p-3">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-2">
+                        <div>
+                            <h4 class="mb-1">@exp.Position</h4>
+                            <div class="vs-experience-company">@exp.Company</div>
+                        </div>
+                        <div class="mt-2 mt-md-0">
+                            <span class="vs-experience-period">
+                                @exp.GetPeriodText()
+                            </span>
+                        </div>
+                    </div>
+
+                    <ul class="mb-0">
+                        @foreach (var r in exp.Responsibilities)
+                        {
+                            <li>@r</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

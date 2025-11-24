@@ -1,0 +1,53 @@
+@model Portfolio.Models.ProjectsViewModel
+
+@{
+    ViewData["Title"] = "Projekty i wyzwania";
+}
+
+<div class="page-bg">
+    <div class="container py-5" style="max-width: 1000px;">
+
+        <h1 class="mb-4">Projekty</h1>
+
+        <div class="row">
+            @foreach (var p in Model.Projects)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title">@p.Title</h4>
+                            <h6 class="card-subtitle mb-2 text-muted">@p.Company</h6>
+                            <p class="card-text mt-3">@p.Description</p>
+
+                            <p class="mt-3 mb-1"><strong>Technologie:</strong></p>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var tech in p.Technologies)
+                                {
+                                    <span class="badge bg-secondary">@tech</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <hr class="my-5"/>
+
+        <h2 class="mb-4">Wyzwania</h2>
+
+        <div class="row">
+            @foreach (var c in Model.Challenges)
+            {
+                <div class="col-md-12 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">@c.Title</h5>
+                            <p class="card-text">@c.Description</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
