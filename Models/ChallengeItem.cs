@@ -1,7 +1,8 @@
-namespace Portfolio.Models;
-
 public class ChallengeItem
 {
-    public string Title { get; set; } = default!;
-    public string Description { get; set; } = default!;
+    public string TitlePl { get; set; } = default!;
+    public string TitleEn { get; set; } = default!;
+
+    public string DescriptionPl { get; set; } = default!;
+    public string DescriptionEn { get; set; } = default!;
 }

@@ -1,31 +1,44 @@
 @model Portfolio.Models.ContactPageViewModel
 
 @{
-    ViewData["Title"] = "Kontakt";
+    var isEnglish = System.Globalization.CultureInfo.CurrentUICulture
+        .TwoLetterISOLanguageName == "en";
+
+    ViewData["Title"] = isEnglish ? "Contact" : "Kontakt";
 }
 
 <div class="page-bg">
     <div class="container py-5" style="max-width: 700px;">
 
-        <div class="vs-panel">  <!-- PANEL START -->
+        <div class="vs-panel">
 
-            <h1 class="mb-4">Kontakt</h1>
+            <h1 class="mb-4">
+                @(isEnglish ? "Contact" : "Kontakt")
+            </h1>
 
-            <p>Możesz się ze mną skontaktować mailowo:</p>
+            <p>
+                @(isEnglish
+                    ? "You can contact me via e-mail:"
+                    : "Możesz się ze mną skontaktować mailowo:")
+            </p>
 
             <div class="d-flex align-items-center gap-3 mb-3">
                 <h4 class="fw-bold m-0">@Model.Info.Email</h4>
 
                 <a class="btn btn-outline-dark btn-sm"
-                   href="mailto:@Model.Info.Email?subject=Kontakt%20ze%20strony%20portfolio">
-                    Napisz maila
+                   href="mailto:@Model.Info.Email?subject=@(isEnglish ? "Contact%20from%20portfolio%20website" : "Kontakt%20ze%20strony%20portfolio")">
+                    @(isEnglish ? "Send e-mail" : "Napisz maila")
                 </a>
             </div>
 
-            <p class="mt-4">Lub telefonicznie:</p>
+            <p class="mt-4">
+                @(isEnglish ? "Or by phone:" : "Lub telefonicznie:")
+            </p>
             <h4 class="fw-bold">@Model.Info.Phone</h4>
 
-            <p class="mt-4">Moje profile społecznościowe:</p>
+            <p class="mt-4">
+                @(isEnglish ? "My social profiles:" : "Moje profile społecznościowe:")
+            </p>
             <ul>
                 @foreach (var link in Model.Info.SocialLinks)
                 {
@@ -37,29 +50,37 @@
 
             <hr class="my-4" />
 
-            <h2 class="mb-3">Pobierz moje CV</h2>
+            <h2 class="mb-3">
+                @(isEnglish ? "Download my CV" : "Pobierz moje CV")
+            </h2>
 
             <a class="btn btn-dark mb-4"
                href="~/files/TomaszKraftCV.pdf"
                download="TomaszKraftCV.pdf">
-                Pobierz CV w PDF
+                @(isEnglish ? "Download CV (PDF)" : "Pobierz CV w PDF")
             </a>
 
             <hr class="my-4" />
 
-            <h2 class="mb-3">Chcesz, żeby CV przyszło na Twój e-mail?</h2>
+            <h2 class="mb-3">
+                @(isEnglish ? "Do you want the CV to be sent to your e-mail?" : "Chcesz, żeby CV przyszło na Twój e-mail?")
+            </h2>
 
             @if (Model.CvSent)
             {
                 <div class="alert alert-success">
-                    CV zostało wysłane na podany adres e-mail.
+                    @(isEnglish
+                        ? "The CV has been sent to the provided e-mail address."
+                        : "CV zostało wysłane na podany adres e-mail.")
                 </div>
             }
 
             @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
             {
                 <div class="alert alert-danger">
-                    Popraw dane i spróbuj ponownie.
+                    @(isEnglish
+                        ? "Please correct the data and try again."
+                        : "Popraw dane i spróbuj ponownie.")
                 </div>
             }
 
@@ -67,17 +88,19 @@
                 @Html.AntiForgeryToken()
 
                 <div class="mb-3">
-                    <label asp-for="Request.Email" class="form-label">Twój adres e-mail</label>
+                    <label asp-for="Request.Email" class="form-label">
+                        @(isEnglish ? "Your e-mail address" : "Twój adres e-mail")
+                    </label>
                     <input asp-for="Request.Email" class="form-control" />
                     <span asp-validation-for="Request.Email" class="text-danger"></span>
                 </div>
 
                 <button type="submit" class="btn btn-secondary">
-                    Wyślij CV na mój e-mail
+                    @(isEnglish ? "Send CV to my e-mail" : "Wyślij CV na mój e-mail")
                 </button>
             </form>
 
-        </div> <!-- PANEL END -->
+        </div>
 
     </div>
 </div>

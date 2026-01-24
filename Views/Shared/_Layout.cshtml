@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var isEnglish = System.Globalization.CultureInfo.CurrentUICulture
+        .TwoLetterISOLanguageName == "en";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,13 +30,48 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="About">O mnie</a>
+                        <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="About">
+                            @(isEnglish ? "About" : "O mnie")
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="Projects">Projekty</a>
+                        <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="Projects">
+                            @(isEnglish ? "Projects" : "Projekty")
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="Contact">Kontakt</a>
+                        <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="Contact">
+                            @(isEnglish ? "Contact" : "Kontakt")
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle vs-nav-link" href="#" id="langDropdown"
+                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @(isEnglish ? "Language" : "Język")
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="Language"
+                                   asp-action="Set"
+                                   asp-route-culture="pl"
+                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString">
+                                    🇵🇱 Polski
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="Language"
+                                   asp-action="Set"
+                                   asp-route-culture="en"
+                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString">
+                                    🇬🇧 English
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Portfolio.Models;
 using Microsoft.Extensions.Options;
 using Portfolio.Models;
+using System.Globalization;
 
 namespace Portfolio.Controllers;
 
@@ -29,11 +30,25 @@ public class HomeController : Controller
     }
     public IActionResult Index()
     {
+       
+        var start = new DateTime(2022, 11, 1);
+        var today = DateTime.Today;
+
+        
+        int months = ((today.Year - start.Year) * 12) + today.Month - start.Month;
+        if (today.Day < start.Day)
+            months--; 
+
+
+        double years = months / 12.0;
+        
+        years = Math.Round(years * 2, MidpointRounding.AwayFromZero) / 2.0;
+
         var model = new HomeIndexViewModel
         {
             Name = "Tomasz Kraft",
             Role = ".NET Developer",
-            YearsOfExperience = 3,
+            YearsOfExperience = years,          
             MainTechnologies = new List<string>
             {
                 "C#",
@@ -47,126 +62,190 @@ public class HomeController : Controller
 
         return View(model);
     }
-
     public IActionResult About()
+{
+    var isEnglish = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
+
+    var model = new AboutViewModel
     {
-        var model = new AboutViewModel
-        {
-            Bio =
-                "Jestem .NET developerem z 3-letnim doświadczeniem. Tworzę aplikacje webowe i desktopowe " +
-                "w technologii .NET, C#, ASP.NET Core, WPF oraz EF Core. Interesuje mnie wysoka jakość kodu, " +
-                "architektura i dobre praktyki. Hobbystycznie zajmuję się fotografią oraz motoryzacją off-roadową.",
-            Hobbies = new List<string>
+        Bio = isEnglish
+            ? "I am a .NET developer with 3 years of experience. I build web and desktop applications " +
+              "using .NET, C#, ASP.NET Core, WPF and EF Core. I focus on high code quality, architecture " +
+              "and good engineering practices. In my free time I am interested in photography and off-road automotive."
+            : "Jestem .NET developerem z 3-letnim doświadczeniem. Tworzę aplikacje webowe i desktopowe " +
+              "w technologii .NET, C#, ASP.NET Core, WPF oraz EF Core. Interesuje mnie wysoka jakość kodu, " +
+              "architektura i dobre praktyki. Hobbystycznie interesuję się fotografią oraz motoryzacją off-roadową.",
+
+        Hobbies = isEnglish
+            ? new List<string>
+            {
+                "Photography",
+                "Off-road automotive",
+                "New technologies"
+            }
+            : new List<string>
             {
                 "Fotografia",
                 "Motoryzacja Off-Road",
                 "Nowe technologie"
             },
-            Experience = new List<ExperienceItem>
+
+        Experience = new List<ExperienceItem>
+        {
+            new()
             {
-                new()
-                {
-                    Position = ".NET Developer",
-                    Company = "Vectio sp. z o.o.",
-                    From = new DateTime(2024, 2, 1),
-                    To = null,
-                    Responsibilities =
+                Position = ".NET Developer",
+                Company = "Vectio sp. z o.o.",
+                From = new DateTime(2024, 2, 1),
+                To = null,
+                Responsibilities = isEnglish
+                    ? new List<string>
+                    {
+                        "Building ASP.NET Core MVC and Web API applications",
+                        "Working with Entity Framework Core and SQL Server",
+                        "Developing WPF desktop applications with MVVM and DevExpress",
+                        "System integrations and code refactoring"
+                    }
+                    : new List<string>
                     {
                         "Tworzenie aplikacji webowych ASP.NET Core MVC i Web API",
                         "Praca z Entity Framework Core oraz SQL Server",
                         "Aplikacje desktopowe WPF + MVVM + DevExpress",
                         "Integracje systemów, refaktoryzacja kodu"
                     }
-                },
-                new()
-                {
-                    Position = ".NET Developer",
-                    Company = "Volvo Polska",
-                    From = new DateTime(2022, 11, 1),
-                    To = new DateTime(2023, 9, 30),
-                    Responsibilities =
+            },
+            new()
+            {
+                Position = ".NET Developer",
+                Company = "Volvo Polska",
+                From = new DateTime(2022, 11, 1),
+                To = new DateTime(2023, 9, 30),
+                Responsibilities = isEnglish
+                    ? new List<string>
+                    {
+                        "Developing internal applications in ASP.NET Core",
+                        "Implementing new features and Web APIs",
+                        "Working with WPF + MVVM + DevExpress",
+                        "Optimizing queries and working with SQL Server"
+                    }
+                    : new List<string>
                     {
                         "Rozwój aplikacji wewnętrznych w ASP.NET Core",
                         "Implementacja nowych funkcji oraz API",
                         "WPF + MVVM + DevExpress",
                         "Optymalizacja zapytań, praca z SQL Server"
                     }
-                }
             }
-        };
+        }
+    };
 
-        return View(model);
-    }
+    return View(model);
+}
 
     public IActionResult Projects()
+{
+    var model = new ProjectsViewModel
     {
-        var model = new ProjectsViewModel
+        Projects = new List<ProjectItem>
         {
-            Projects = new List<ProjectItem>
+            new()
             {
-                new()
+                TitlePl = "System wspierający procesy w fabryce",
+                TitleEn = "System supporting factory processes",
+
+                Company = "Volvo Polska",
+
+                DescriptionPl =
+                    "Oprogramowanie wspierające procesy w fabryce – m.in. obsługa danych produkcyjnych, " +
+                    "integracje z istniejącymi systemami i raportowanie.",
+
+                DescriptionEn =
+                    "Software supporting factory processes – including production data handling, " +
+                    "systems integration and reporting.",
+
+                Technologies = new List<string>
                 {
-                    Title = "System wspierający procesy w fabryce",
-                    Company = "Volvo Polska",
-                    Description =
-                        "Oprogramowanie wspierające procesy w fabryce – m.in. obsługa danych produkcyjnych, " +
-                        "integracje z istniejącymi systemami i raportowanie.",
-                    Technologies = new List<string>
-                    {
-                        "C#",
-                        ".NET",
-                        "ASP.NET Core MVC",
-                        "Entity Framework",
-                        "SQL Server"
-                    }
-                },
-                new()
-                {
-                    Title = "System do obsługi firmy logistycznej",
-                    Company = "Vectio sp. z o.o.",
-                    Description =
-                        "Rozbudowany system do obsługi firmy logistycznej – zlecenia transportowe, kierowcy, flota, " +
-                        "rozliczenia, raporty oraz integracje z systemami zewnętrznymi.",
-                    Technologies = new List<string>
-                    {
-                        "C#",
-                        ".NET 8",
-                        "ASP.NET Core",
-                        "WPF + MVVM + DevExpress",
-                        "Entity Framework Core",
-                        "SQL Server"
-                    }
+                    "C#",
+                    ".NET",
+                    "ASP.NET Core MVC",
+                    "Entity Framework",
+                    "SQL Server"
                 }
             },
-            Challenges = new List<ChallengeItem>
+            new()
             {
-                new()
+                TitlePl = "System do obsługi firmy logistycznej",
+                TitleEn = "Logistics management system",
+
+                Company = "Vectio sp. z o.o.",
+
+                DescriptionPl =
+                    "Rozbudowany system do obsługi firmy logistycznej – zlecenia transportowe, kierowcy, flota, " +
+                    "rozliczenia, raporty oraz integracje z systemami zewnętrznymi.",
+
+                DescriptionEn =
+                    "A comprehensive system for logistics companies – transport orders, drivers, fleet, " +
+                    "settlements, reporting and external systems integrations.",
+
+                Technologies = new List<string>
                 {
-                    Title = "Migracja z .NET Framework 4.8 do .NET 8",
-                    Description =
-                        "Migracja ok. 90% systemu z .NET Framework 4.8 do .NET 8 praktycznie w pojedynkę – " +
-                        "w tym dostosowanie architektury, aktualizacja bibliotek i rozwiązanie problemów zgodności."
-                },
-                new()
-                {
-                    Title = "Optymalizacja dużego systemu WPF + EF Core",
-                    Description =
-                        "Praca nad wydajnością i stabilnością rozbudowanej aplikacji WPF/DevExpress obsługującej " +
-                        "duże ilości danych – optymalizacja zapytań EF Core, redukcja zużycia pamięci, " +
-                        "poprawa responsywności UI."
-                },
-                new()
-                {
-                    Title = "End-to-end funkcjonalności",
-                    Description =
-                        "Prowadzenie funkcjonalności od rozmów z biznesem, przez projekt techniczny, " +
-                        "implementację w .NET i EF Core, po wdrożenie i utrzymanie."
+                    "C#",
+                    ".NET 8",
+                    "ASP.NET Core",
+                    "WPF + MVVM + DevExpress",
+                    "Entity Framework Core",
+                    "SQL Server"
                 }
             }
-        };
+        },
 
-        return View(model);
-    }
+        Challenges = new List<ChallengeItem>
+        {
+            new()
+            {
+                TitlePl = "Migracja z .NET Framework 4.8 do .NET 8",
+                TitleEn = "Migration from .NET Framework 4.8 to .NET 8",
+
+                DescriptionPl =
+                    "Migracja ok. 90% systemu z .NET Framework 4.8 do .NET 8 praktycznie w pojedynkę – " +
+                    "w tym dostosowanie architektury, aktualizacja bibliotek i rozwiązanie problemów zgodności.",
+
+                DescriptionEn =
+                    "Migration of ~90% of the system from .NET Framework 4.8 to .NET 8 almost independently – " +
+                    "including architecture adjustments, library updates and compatibility fixes."
+            },
+            new()
+            {
+                TitlePl = "Optymalizacja dużego systemu WPF + EF Core",
+                TitleEn = "Optimization of a large WPF + EF Core system",
+
+                DescriptionPl =
+                    "Praca nad wydajnością i stabilnością rozbudowanej aplikacji WPF/DevExpress obsługującej " +
+                    "duże ilości danych – optymalizacja zapytań EF Core, redukcja zużycia pamięci, " +
+                    "poprawa responsywności UI.",
+
+                DescriptionEn =
+                    "Performance and stability improvements in a large WPF/DevExpress application processing " +
+                    "large datasets — EF Core query optimization, memory reduction, UI responsiveness improvements."
+            },
+            new()
+            {
+                TitlePl = "End-to-end funkcjonalności",
+                TitleEn = "End-to-end features",
+
+                DescriptionPl =
+                    "Prowadzenie funkcjonalności od rozmów z biznesem, przez projekt techniczny, " +
+                    "implementację w .NET i EF Core, po wdrożenie i utrzymanie.",
+
+                DescriptionEn =
+                    "Driving features end-to-end — from business discussions, through technical design, " +
+                    "implementation in .NET and EF Core, to deployment and maintenance."
+            }
+        }
+    };
+
+    return View(model);
+}
 
     // GET: Contact
     [HttpGet]
@@ -202,7 +281,14 @@ public class HomeController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Błąd podczas wysyłania CV");
-            ModelState.AddModelError(string.Empty, "Wystąpił błąd podczas wysyłania CV. Spróbuj ponownie później.");
+
+            var isEnglish = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
+
+            ModelState.AddModelError(
+                string.Empty,
+                isEnglish
+                    ? "An error occurred while sending the CV. Please try again later."
+                    : "Wystąpił błąd podczas wysyłania CV. Spróbuj ponownie później.");
         }
 
         return View(model);
@@ -230,12 +316,15 @@ public class HomeController : Controller
                 "Konfiguracja EmailSettings jest niepełna. Uzupełnij Host/User/Password w konfiguracji (user-secrets/env).");
         }
 
-        var subject = "CV – Tomasz Kraft";
-        var body =
-            "Cześć,\n\n" +
-            "W załączeniu przesyłam moje CV w formacie PDF.\n\n" +
-            "Pozdrawiam,\n" +
-            "Tomasz Kraft";
+        var isEnglish = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
+
+        var subject = isEnglish
+            ? "CV – Tomasz Kraft"
+            : "CV – Tomasz Kraft";
+
+        var body = isEnglish
+            ? "Hi,\n\nPlease find attached my CV in PDF format.\n\nBest regards,\nTomasz Kraft"
+            : "Cześć,\n\nW załączeniu przesyłam moje CV w formacie PDF.\n\nPozdrawiam,\nTomasz Kraft";
 
         using var message = new MailMessage
         {

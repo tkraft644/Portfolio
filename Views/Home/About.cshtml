@@ -1,17 +1,39 @@
 @model Portfolio.Models.AboutViewModel
 
 @{
-    ViewData["Title"] = "O mnie i doświadczenie";
+    var isEnglish = System.Globalization.CultureInfo.CurrentUICulture
+        .TwoLetterISOLanguageName == "en";
+
+    ViewData["Title"] = isEnglish
+        ? "About me & experience"
+        : "O mnie i doświadczenie";
 }
 
 <div class="page-bg">
     <div class="container py-5" style="max-width: 900px;">
         <div class="vs-panel">
 
-            <h1 class="mb-4">O mnie</h1>
-            <p>@Model.Bio</p>
+            <h1 class="mb-4">
+                @(isEnglish ? "About me" : "O mnie")
+            </h1>
 
-            <h3 class="mt-4">Zainteresowania</h3>
+            @if (isEnglish)
+            {
+                <p>
+                    I am a .NET developer with 3 years of experience. I build web and desktop applications
+                    using .NET, C#, ASP.NET Core, WPF and Entity Framework Core. I focus on clean code,
+                    solid architecture and good engineering practices. In my free time I enjoy photography
+                    and off-road automotive.
+                </p>
+            }
+            else
+            {
+                <p>@Model.Bio</p>
+            }
+
+            <h3 class="mt-4">
+                @(isEnglish ? "Interests" : "Zainteresowania")
+            </h3>
             <ul>
                 @foreach (var hobby in Model.Hobbies)
                 {
@@ -21,7 +43,9 @@
 
             <hr class="my-5" />
 
-            <h2 class="mb-4">Doświadczenie</h2>
+            <h2 class="mb-4">
+                @(isEnglish ? "Experience" : "Doświadczenie")
+            </h2>
 
             @foreach (var exp in Model.Experience)
             {

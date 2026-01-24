@@ -1,5 +1,9 @@
 ﻿@model Portfolio.Models.HomeIndexViewModel
 
+@{
+    var isEnglish = System.Globalization.CultureInfo.CurrentUICulture
+        .TwoLetterISOLanguageName == "en";
+}
 
 <div class="home-hero" style="
     background: url('@Model.HeroBackgroundUrl') center/cover no-repeat !important;
@@ -19,9 +23,24 @@
 
     <div class="text-center" style="position: relative; z-index: 1;">
         <h1 class="display-3 fw-bold">@Model.Name</h1>
-        <p class="lead mt-3">@Model.Role z @Model.YearsOfExperience-letnim doświadczeniem.</p>
 
-        <p class="mt-4">Technologie, z których korzystam na co dzień:</p>
+        <p class="lead mt-3">
+            @if (isEnglish)
+            {
+                @($"{Model.Role} with {Model.YearsOfExperience} years of experience.")
+            }
+            else
+            {
+                @($"{Model.Role} z {Model.YearsOfExperience}-letnim doświadczeniem.")
+            }
+        </p>
+
+        <p class="mt-4">
+            @(isEnglish
+                ? "Technologies I use on a daily basis:"
+                : "Technologie, z których korzystam na co dzień:")
+        </p>
+
         <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
             @foreach (var tech in Model.MainTechnologies)
             {
@@ -29,6 +48,8 @@
             }
         </div>
 
-        <a asp-controller="Home" asp-action="About" class="btn btn-secondary btn-lg">O mnie</a>
+        <a asp-controller="Home" asp-action="About" class="btn btn-secondary btn-lg">
+            @(isEnglish ? "About me" : "O mnie")
+        </a>
     </div>
 </div>
