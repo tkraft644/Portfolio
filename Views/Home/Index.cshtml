@@ -1,8 +1,9 @@
 ﻿@model Portfolio.Models.HomeIndexViewModel
 
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
 @{
-    var isEnglish = System.Globalization.CultureInfo.CurrentUICulture
-        .TwoLetterISOLanguageName == "en";
+    ViewData["Title"] = Localizer["Home.Title"];
 }
 
 <div class="home-hero" style="
@@ -25,20 +26,11 @@
         <h1 class="display-3 fw-bold">@Model.Name</h1>
 
         <p class="lead mt-3">
-            @if (isEnglish)
-            {
-                @($"{Model.Role} with {Model.YearsOfExperience} years of experience.")
-            }
-            else
-            {
-                @($"{Model.Role} z {Model.YearsOfExperience}-letnim doświadczeniem.")
-            }
+            @Localizer["Home.RoleExperience", Model.Role, Model.YearsOfExperience]
         </p>
 
         <p class="mt-4">
-            @(isEnglish
-                ? "Technologies I use on a daily basis:"
-                : "Technologie, z których korzystam na co dzień:")
+            @Localizer["Home.DailyTech"]
         </p>
 
         <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
@@ -49,7 +41,7 @@
         </div>
 
         <a asp-controller="Home" asp-action="About" class="btn btn-secondary btn-lg">
-            @(isEnglish ? "About me" : "O mnie")
+            @Localizer["Home.AboutMe"]
         </a>
     </div>
 </div>

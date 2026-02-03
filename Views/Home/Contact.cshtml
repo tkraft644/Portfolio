@@ -1,10 +1,10 @@
 @model Portfolio.Models.ContactPageViewModel
 
-@{
-    var isEnglish = System.Globalization.CultureInfo.CurrentUICulture
-        .TwoLetterISOLanguageName == "en";
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
-    ViewData["Title"] = isEnglish ? "Contact" : "Kontakt";
+@{
+    ViewData["Title"] = Localizer["Contact.Title"];
+    var mailSubject = Uri.EscapeDataString(Localizer["Contact.MailSubject"].Value);
 }
 
 <div class="page-bg">
@@ -13,31 +13,29 @@
         <div class="vs-panel">
 
             <h1 class="mb-4">
-                @(isEnglish ? "Contact" : "Kontakt")
+                @Localizer["Contact.Heading"]
             </h1>
 
             <p>
-                @(isEnglish
-                    ? "You can contact me via e-mail:"
-                    : "Możesz się ze mną skontaktować mailowo:")
+                @Localizer["Contact.EmailIntro"]
             </p>
 
             <div class="d-flex align-items-center gap-3 mb-3">
                 <h4 class="fw-bold m-0">@Model.Info.Email</h4>
 
                 <a class="btn btn-outline-dark btn-sm"
-                   href="mailto:@Model.Info.Email?subject=@(isEnglish ? "Contact%20from%20portfolio%20website" : "Kontakt%20ze%20strony%20portfolio")">
-                    @(isEnglish ? "Send e-mail" : "Napisz maila")
+                   href="mailto:@Model.Info.Email?subject=@mailSubject">
+                    @Localizer["Contact.SendEmail"]
                 </a>
             </div>
 
             <p class="mt-4">
-                @(isEnglish ? "Or by phone:" : "Lub telefonicznie:")
+                @Localizer["Contact.PhoneIntro"]
             </p>
             <h4 class="fw-bold">@Model.Info.Phone</h4>
 
             <p class="mt-4">
-                @(isEnglish ? "My social profiles:" : "Moje profile społecznościowe:")
+                @Localizer["Contact.SocialIntro"]
             </p>
             <ul>
                 @foreach (var link in Model.Info.SocialLinks)
@@ -51,54 +49,60 @@
             <hr class="my-4" />
 
             <h2 class="mb-3">
-                @(isEnglish ? "Download my CV" : "Pobierz moje CV")
+                @Localizer["Contact.DownloadCvHeading"]
             </h2>
 
             <a class="btn btn-dark mb-4"
                href="~/files/TomaszKraftCV.pdf"
                download="TomaszKraftCV.pdf">
-                @(isEnglish ? "Download CV (PDF)" : "Pobierz CV w PDF")
+                @Localizer["Contact.DownloadCvButton"]
             </a>
 
             <hr class="my-4" />
 
             <h2 class="mb-3">
-                @(isEnglish ? "Do you want the CV to be sent to your e-mail?" : "Chcesz, żeby CV przyszło na Twój e-mail?")
+                @Localizer["Contact.EmailCvHeading"]
             </h2>
 
-            @if (Model.CvSent)
+            @if (!Model.CvEmailEnabled)
             {
-                <div class="alert alert-success">
-                    @(isEnglish
-                        ? "The CV has been sent to the provided e-mail address."
-                        : "CV zostało wysłane na podany adres e-mail.")
+                <div class="alert alert-info">
+                    @Localizer["Contact.CvEmailDisabled"]
                 </div>
             }
-
-            @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+            else
             {
-                <div class="alert alert-danger">
-                    @(isEnglish
-                        ? "Please correct the data and try again."
-                        : "Popraw dane i spróbuj ponownie.")
-                </div>
+                @if (Model.CvSent)
+                {
+                    <div class="alert alert-success">
+                        @Localizer["Contact.CvSentSuccess"]
+                    </div>
+                }
+
+                @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+                {
+                    <div class="alert alert-danger">
+                        <div>@Localizer["Contact.ValidationError"]</div>
+                        <div asp-validation-summary="All"></div>
+                    </div>
+                }
+
+                <form asp-action="Contact" method="post" class="mt-3">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label asp-for="Request.Email" class="form-label">
+                            @Localizer["Contact.EmailLabel"]
+                        </label>
+                        <input asp-for="Request.Email" class="form-control" />
+                        <span asp-validation-for="Request.Email" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary">
+                        @Localizer["Contact.EmailCvButton"]
+                    </button>
+                </form>
             }
-
-            <form asp-action="Contact" method="post" class="mt-3">
-                @Html.AntiForgeryToken()
-
-                <div class="mb-3">
-                    <label asp-for="Request.Email" class="form-label">
-                        @(isEnglish ? "Your e-mail address" : "Twój adres e-mail")
-                    </label>
-                    <input asp-for="Request.Email" class="form-control" />
-                    <span asp-validation-for="Request.Email" class="text-danger"></span>
-                </div>
-
-                <button type="submit" class="btn btn-secondary">
-                    @(isEnglish ? "Send CV to my e-mail" : "Wyślij CV na mój e-mail")
-                </button>
-            </form>
 
         </div>
 

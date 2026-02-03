@@ -1,12 +1,9 @@
 @model Portfolio.Models.AboutViewModel
 
-@{
-    var isEnglish = System.Globalization.CultureInfo.CurrentUICulture
-        .TwoLetterISOLanguageName == "en";
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
-    ViewData["Title"] = isEnglish
-        ? "About me & experience"
-        : "O mnie i doświadczenie";
+@{
+    ViewData["Title"] = Localizer["About.Title"];
 }
 
 <div class="page-bg">
@@ -14,25 +11,13 @@
         <div class="vs-panel">
 
             <h1 class="mb-4">
-                @(isEnglish ? "About me" : "O mnie")
+                @Localizer["About.Heading"]
             </h1>
 
-            @if (isEnglish)
-            {
-                <p>
-                    I am a .NET developer with 3 years of experience. I build web and desktop applications
-                    using .NET, C#, ASP.NET Core, WPF and Entity Framework Core. I focus on clean code,
-                    solid architecture and good engineering practices. In my free time I enjoy photography
-                    and off-road automotive.
-                </p>
-            }
-            else
-            {
-                <p>@Model.Bio</p>
-            }
+            <p>@Model.Bio</p>
 
             <h3 class="mt-4">
-                @(isEnglish ? "Interests" : "Zainteresowania")
+                @Localizer["About.Interests"]
             </h3>
             <ul>
                 @foreach (var hobby in Model.Hobbies)
@@ -44,7 +29,7 @@
             <hr class="my-5" />
 
             <h2 class="mb-4">
-                @(isEnglish ? "Experience" : "Doświadczenie")
+                @Localizer["About.Experience"]
             </h2>
 
             @foreach (var exp in Model.Experience)

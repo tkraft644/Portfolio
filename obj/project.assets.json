@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/tomek/RiderProjects/Portfolio/Portfolio.csproj",
+      "projectUniqueName": "/Users/tomek/Documents/Portfolio/Portfolio/Portfolio.csproj",
       "projectName": "Portfolio",
-      "projectPath": "/Users/tomek/RiderProjects/Portfolio/Portfolio.csproj",
+      "projectPath": "/Users/tomek/Documents/Portfolio/Portfolio/Portfolio.csproj",
       "packagesPath": "/Users/tomek/.nuget/packages/",
-      "outputPath": "/Users/tomek/RiderProjects/Portfolio/obj/",
+      "outputPath": "/Users/tomek/Documents/Portfolio/Portfolio/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/tomek/.nuget/NuGet/NuGet.Config"

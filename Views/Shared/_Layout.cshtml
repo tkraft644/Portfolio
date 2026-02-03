@@ -1,10 +1,7 @@
-﻿@{
-    var isEnglish = System.Globalization.CultureInfo.CurrentUICulture
-        .TwoLetterISOLanguageName == "en";
-}
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,17 +28,17 @@
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
                         <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="About">
-                            @(isEnglish ? "About" : "O mnie")
+                            @Localizer["Nav.About"]
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="Projects">
-                            @(isEnglish ? "Projects" : "Projekty")
+                            @Localizer["Nav.Projects"]
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="Contact">
-                            @(isEnglish ? "Contact" : "Kontakt")
+                            @Localizer["Nav.Contact"]
                         </a>
                     </li>
                 </ul>
@@ -50,7 +47,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle vs-nav-link" href="#" id="langDropdown"
                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            @(isEnglish ? "Language" : "Język")
+                            @Localizer["Nav.Language"]
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
                             <li>

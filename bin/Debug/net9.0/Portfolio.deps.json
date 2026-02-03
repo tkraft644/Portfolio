@@ -9,6 +9,14 @@
       "Portfolio/1.0.0": {
         "runtime": {
           "Portfolio.dll": {}
+        },
+        "resources": {
+          "en/Portfolio.resources.dll": {
+            "locale": "en"
+          },
+          "pl/Portfolio.resources.dll": {
+            "locale": "pl"
+          }
         }
       }
     }

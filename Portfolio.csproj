@@ -4,15 +4,30 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <BuildClientAppOnBuild>false</BuildClientAppOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\files\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Portfolio.Tests\**\*.cs" />
+  </ItemGroup>
   
-  <Target Name="BuildClientApp" BeforeTargets="Build">
-    <Exec WorkingDirectory="ClientApp" Command="npm install" />
+  <Target Name="BuildClientApp" BeforeTargets="Publish"
+          Condition="Exists('ClientApp/package.json') AND '$(ClientAppBuilt)' != 'true'">
+    <Exec WorkingDirectory="ClientApp" Command="npm ci" Condition="'$(CI)' == 'true'" />
+    <Exec WorkingDirectory="ClientApp" Command="npm install" Condition="'$(CI)' != 'true' AND !Exists('ClientApp/node_modules')" />
     <Exec WorkingDirectory="ClientApp" Command="npm run build" />
+    <PropertyGroup>
+      <ClientAppBuilt>true</ClientAppBuilt>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="BuildClientAppIfMissing" BeforeTargets="Build"
+          Condition="'$(BuildClientAppOnBuild)' == 'true' AND Exists('ClientApp/package.json') AND !Exists('wwwroot/app/browser/index.html')">
+    <CallTarget Targets="BuildClientApp" />
   </Target>
 
 </Project>

@@ -2,6 +2,7 @@ namespace Portfolio.Models;
 
 public class EmailSettings
 {
+    public bool Enabled { get; set; }
     public string FromAddress { get; set; } = string.Empty;
     public string FromDisplayName { get; set; } = string.Empty;
     public string Host { get; set; } = string.Empty;
