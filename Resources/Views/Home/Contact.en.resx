@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Contact.Title" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Contact.Heading" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Contact.EmailIntro" xml:space="preserve">
+    <value>You can contact me via e-mail:</value>
+  </data>
+  <data name="Contact.SendEmail" xml:space="preserve">
+    <value>Send e-mail</value>
+  </data>
+  <data name="Contact.MailSubject" xml:space="preserve">
+    <value>Contact from portfolio website</value>
+  </data>
+  <data name="Contact.PhoneIntro" xml:space="preserve">
+    <value>Or by phone:</value>
+  </data>
+  <data name="Contact.SocialIntro" xml:space="preserve">
+    <value>My social profiles:</value>
+  </data>
+  <data name="Contact.DownloadCvHeading" xml:space="preserve">
+    <value>Download my CV</value>
+  </data>
+  <data name="Contact.DownloadCvButton" xml:space="preserve">
+    <value>Download CV (PDF)</value>
+  </data>
+  <data name="Contact.EmailCvHeading" xml:space="preserve">
+    <value>Do you want the CV to be sent to your e-mail?</value>
+  </data>
+  <data name="Contact.CvEmailDisabled" xml:space="preserve">
+    <value>Sending CV by e-mail is currently disabled.</value>
+  </data>
+  <data name="Contact.CvSentSuccess" xml:space="preserve">
+    <value>The CV has been sent to the provided e-mail address.</value>
+  </data>
+  <data name="Contact.ValidationError" xml:space="preserve">
+    <value>Please correct the data and try again.</value>
+  </data>
+  <data name="Contact.EmailLabel" xml:space="preserve">
+    <value>Your e-mail address</value>
+  </data>
+  <data name="Contact.EmailCvButton" xml:space="preserve">
+    <value>Send CV to my e-mail</value>
+  </data>
+</root>

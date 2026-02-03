@@ -1,0 +1,26 @@
+# Build artifacts
+bin/
+obj/
+wwwroot/app/
+
+# Node / Angular
+ClientApp/node_modules/
+ClientApp/dist/
+ClientApp/.angular/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDEs / editors
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Local overrides (keep real appsettings tracked)
+appsettings.*.local.json
