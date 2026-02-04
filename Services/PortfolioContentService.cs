@@ -210,10 +210,10 @@ public class PortfolioContentService : IPortfolioContentService
                     TitlePl = "Migracja z .NET Framework 4.8 do .NET 8",
                     TitleEn = "Migration from .NET Framework 4.8 to .NET 8",
                     DescriptionPl =
-                        "Migracja ok. 90% systemu z .NET Framework 4.8 do .NET 8 praktycznie w pojedynkę – " +
+                        "Migracja ok. 90% systemu z .NET Framework 4.8 do .NET 8 w małym zespole– " +
                         "w tym dostosowanie architektury, aktualizacja bibliotek i rozwiązanie problemów zgodności.",
                     DescriptionEn =
-                        "Migration of ~90% of the system from .NET Framework 4.8 to .NET 8 almost independently – " +
+                        "Migration of ~90% of the system from .NET Framework 4.8 to .NET 8 in small team – " +
                         "including architecture adjustments, library updates and compatibility fixes."
                 },
                 new()
