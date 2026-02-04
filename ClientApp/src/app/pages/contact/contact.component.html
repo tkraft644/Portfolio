@@ -1,0 +1,50 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <ng-container *ngIf="isReady(vm)">
+    <h1 class="h3 mb-4">Contact</h1>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h4 class="mb-3">{{ vm.data.info.email }}</h4>
+
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <a class="btn btn-outline-dark btn-sm" [href]="'mailto:' + vm.data.info.email">
+            Send e-mail
+          </a>
+          <a class="btn btn-secondary btn-sm" href="/Home/Contact">
+            Open full contact page (MVC)
+          </a>
+        </div>
+
+        <p class="mb-1 text-muted">Phone</p>
+        <div class="fw-bold mb-4">{{ vm.data.info.phone }}</div>
+
+        <p class="mb-2 text-muted">Social</p>
+        <ul class="mb-0">
+          <li *ngFor="let link of vm.data.info.socialLinks">
+            <a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.name }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alert alert-info mt-4 mb-0" *ngIf="!vm.data.cvEmailEnabled">
+      CV e-mail sending is currently disabled (toggle with <code>EmailSettings.Enabled</code>).
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isLoading(vm)">
+    <div class="vs-panel placeholder-glow">
+      <div class="placeholder w-25 mb-4"></div>
+      <div class="placeholder w-50 mb-3"></div>
+      <div class="placeholder w-100 mb-2"></div>
+      <div class="placeholder w-75 mb-4"></div>
+      <div class="placeholder w-50 mb-3"></div>
+      <div class="placeholder w-100 mb-2"></div>
+      <div class="placeholder w-75"></div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isError(vm)">
+    <div class="alert alert-danger mb-0">{{ vm.message }}</div>
+  </ng-container>
+</ng-container>

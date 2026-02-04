@@ -1,5 +1,6 @@
 html {
   font-size: 14px;
+  overflow-y: scroll;
 }
 
 @media (min-width: 768px) {
@@ -20,73 +21,247 @@ html {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
-/* === Visual Studio Dark Theme – global === */
+/* === Theme tokens === */
+
+:root {
+  color-scheme: light;
+
+  --accent: #007acc;
+  --accent-hover: #0791e6;
+
+  --bg: #f8f9fa;
+  --text: #212529;
+  --link: #0d6efd;
+  --link-hover: #0a58ca;
+
+  --navbar-bg: #ffffff;
+  --navbar-border: #dee2e6;
+  --title: #111827;
+  --nav-link: #212529;
+  --nav-link-hover: #111827;
+  --nav-link-active: #111827;
+
+  --main-bg: #f8f9fa;
+
+  --panel-bg: #ffffff;
+  --panel-border: #dee2e6;
+  --panel-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+
+  --footer-bg: #ffffff;
+  --footer-border: #dee2e6;
+  --footer-text: #6c757d;
+
+  --card-bg: #ffffff;
+  --card-border: #dee2e6;
+  --card-text: var(--text);
+  --card-title: var(--text);
+  --card-subtitle: #6c757d;
+
+  --badge-bg: #e9ecef;
+  --badge-text: #212529;
+
+  --outline-border: #212529;
+  --outline-text: #212529;
+  --outline-hover-bg: #212529;
+  --outline-hover-text: #ffffff;
+
+  --input-bg: #ffffff;
+  --input-border: #ced4da;
+  --input-text: #212529;
+  --input-focus-border: var(--accent);
+  --input-focus-shadow: 0 0 0 0.2rem rgba(0, 122, 204, 0.25);
+
+  --alert-success-bg: #d1e7dd;
+  --alert-success-border: #badbcc;
+  --alert-success-text: #0f5132;
+
+  --alert-danger-bg: #f8d7da;
+  --alert-danger-border: #f5c2c7;
+  --alert-danger-text: #842029;
+
+  --page-surface-bg: rgba(255, 255, 255, 0.92);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+
+    --bg: #1e1e1e;
+    --text: #d4d4d4;
+    --link: #9cdcfe;
+    --link-hover: #4fc1ff;
+
+    --navbar-bg: #252526;
+    --navbar-border: #3f3f46;
+    --title: #ffffff;
+    --nav-link: #d4d4d4;
+    --nav-link-hover: #ffffff;
+    --nav-link-active: #ffffff;
+
+    --main-bg: #1e1e1e;
+
+    --panel-bg: #252526;
+    --panel-border: #3f3f46;
+    --panel-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+    --footer-bg: #252526;
+    --footer-border: #3f3f46;
+    --footer-text: #d4d4d4;
+
+    --card-bg: #252526;
+    --card-border: #3f3f46;
+    --card-text: #d4d4d4;
+    --card-title: #ffffff;
+    --card-subtitle: #9cdcfe;
+
+    --badge-bg: #3f3f46;
+    --badge-text: #d4d4d4;
+
+    --outline-border: #3f3f46;
+    --outline-text: #d4d4d4;
+    --outline-hover-bg: #3f3f46;
+    --outline-hover-text: #ffffff;
+
+    --input-bg: #1e1e1e;
+    --input-border: #3f3f46;
+    --input-text: #d4d4d4;
+
+    --alert-success-bg: #1b5e20;
+    --alert-success-border: #2e7d32;
+    --alert-success-text: #c8e6c9;
+
+    --alert-danger-bg: #5d1f1f;
+    --alert-danger-border: #b71c1c;
+    --alert-danger-text: #ffcdd2;
+
+    --page-surface-bg: rgba(37, 37, 38, 0.96);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #1e1e1e;
+  --text: #d4d4d4;
+  --link: #9cdcfe;
+  --link-hover: #4fc1ff;
+
+  --navbar-bg: #252526;
+  --navbar-border: #3f3f46;
+  --title: #ffffff;
+  --nav-link: #d4d4d4;
+  --nav-link-hover: #ffffff;
+  --nav-link-active: #ffffff;
+
+  --main-bg: #1e1e1e;
+
+  --panel-bg: #252526;
+  --panel-border: #3f3f46;
+  --panel-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+  --footer-bg: #252526;
+  --footer-border: #3f3f46;
+  --footer-text: #d4d4d4;
+
+  --card-bg: #252526;
+  --card-border: #3f3f46;
+  --card-text: #d4d4d4;
+  --card-title: #ffffff;
+  --card-subtitle: #9cdcfe;
+
+  --badge-bg: #3f3f46;
+  --badge-text: #d4d4d4;
+
+  --outline-border: #3f3f46;
+  --outline-text: #d4d4d4;
+  --outline-hover-bg: #3f3f46;
+  --outline-hover-text: #ffffff;
+
+  --input-bg: #1e1e1e;
+  --input-border: #3f3f46;
+  --input-text: #d4d4d4;
+
+  --alert-success-bg: #1b5e20;
+  --alert-success-border: #2e7d32;
+  --alert-success-text: #c8e6c9;
+
+  --alert-danger-bg: #5d1f1f;
+  --alert-danger-border: #b71c1c;
+  --alert-danger-text: #ffcdd2;
+
+  --page-surface-bg: rgba(37, 37, 38, 0.96);
+}
 
 html, body {
   height: 100%;
 }
 
-body.vs-dark,
 body {
-  background-color: #1e1e1e;
-  color: #d4d4d4;
+  background-color: var(--bg);
+  color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Linki ogólnie */
 body a {
-  color: #9cdcfe;
+  color: var(--link);
   text-decoration: none;
 }
 
 body a:hover {
-  color: #4fc1ff;
+  color: var(--link-hover);
   text-decoration: underline;
 }
 
 /* === Navbar w stylu VS === */
 
 .navbar-vs {
-  background-color: #252526 !important;
-  border-bottom: 1px solid #3f3f46 !important;
+  background-color: var(--navbar-bg) !important;
+  border-bottom: 1px solid var(--navbar-border) !important;
 }
 
 .vs-title {
-  color: #ffffff !important;
+  color: var(--title) !important;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 
 .vs-nav-link {
-  color: #d4d4d4 !important;
+  color: var(--nav-link) !important;
   margin-right: 0.75rem;
 }
 
 .vs-nav-link:hover,
 .vs-nav-link:focus {
-  color: #ffffff !important;
+  color: var(--nav-link-hover) !important;
 }
 
 /* Aktywny link w menu – możesz dodać w przyszłości przez TagHelper/klasę active */
 .vs-nav-link.active {
-  color: #ffffff !important;
-  border-bottom: 2px solid #007acc;
+  color: var(--nav-link-active) !important;
+  border-bottom: 2px solid var(--accent);
 }
 
-/* === Kontener główny – „panel” jak edytor === */
+/* === Kontener główny === */
 
-main.pb-3 {
-  background-color: #1e1e1e;
+main[role="main"] {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--main-bg);
 }
 
 /* Karty/sekcje, np. About, Projects, Contact */
 
 .vs-panel {
-  background-color: #252526;
-  border: 1px solid #3f3f46;
+  background-color: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 4px;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--panel-shadow);
 }
 
 /* Możesz używać w widokach: <div class="vs-panel">...</div> */
@@ -95,137 +270,119 @@ main.pb-3 {
 
 .btn-dark,
 .btn-secondary {
-  background-color: #007acc;
-  border-color: #007acc;
+  background-color: var(--accent);
+  border-color: var(--accent);
   color: #ffffff;
 }
 
 .btn-dark:hover,
 .btn-secondary:hover {
-  background-color: #0791e6;
-  border-color: #0791e6;
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
   color: #ffffff;
 }
 
 .btn-outline-dark {
-  border-color: #3f3f46;
-  color: #d4d4d4;
+  border-color: var(--outline-border);
+  color: var(--outline-text);
 }
 
 .btn-outline-dark:hover {
-  background-color: #3f3f46;
-  color: #ffffff;
+  background-color: var(--outline-hover-bg);
+  color: var(--outline-hover-text);
 }
 
 /* === Footer === */
 
 .footer {
-  background-color: #252526;
-  border-top: 1px solid #3f3f46;
-  color: #d4d4d4;
+  background-color: var(--footer-bg);
+  border-top: 1px solid var(--footer-border);
+  color: var(--footer-text);
+  flex-shrink: 0;
 }
 
 .footer a {
-  color: #9cdcfe;
+  color: var(--link);
 }
 
 .footer a:hover {
-  color: #4fc1ff;
+  color: var(--link-hover);
 }
 
 /* === „Karty” projektów w stylu VS === */
 
 .card {
-  background-color: #252526;
-  border: 1px solid #3f3f46;
-  color: #d4d4d4;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--card-text);
 }
 
 .card .card-title {
-  color: #ffffff;
+  color: var(--card-title);
 }
 
 .card .card-subtitle {
-  color: #9cdcfe;
+  color: var(--card-subtitle);
 }
 
 /* Badge z technologiami */
 
 .badge.bg-secondary {
-  background-color: #3f3f46 !important;
-  color: #d4d4d4;
+  background-color: var(--badge-bg) !important;
+  color: var(--badge-text);
 }
 
 /* Formularz – ciemne pola */
 
 .form-control {
-  background-color: #1e1e1e;
-  border: 1px solid #3f3f46;
-  color: #d4d4d4;
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--input-text);
 }
 
 .form-control:focus {
-  background-color: #1e1e1e;
-  border-color: #007acc;
-  box-shadow: 0 0 0 0.2rem rgba(0, 122, 204, 0.25);
-  color: #ffffff;
+  background-color: var(--input-bg);
+  border-color: var(--input-focus-border);
+  box-shadow: var(--input-focus-shadow);
+  color: var(--input-text);
 }
 
 /* Alerty na dark theme */
 
 .alert-success {
-  background-color: #1b5e20;
-  border-color: #2e7d32;
-  color: #c8e6c9;
+  background-color: var(--alert-success-bg);
+  border-color: var(--alert-success-border);
+  color: var(--alert-success-text);
 }
 
 .alert-danger {
-  background-color: #5d1f1f;
-  border-color: #b71c1c;
-  color: #ffcdd2;
+  background-color: var(--alert-danger-bg);
+  border-color: var(--alert-danger-border);
+  color: var(--alert-danger-text);
 }
-.home-hero {
-  min-height: calc(100vh - 120px); 
-}
-footer.footer,
-footer.footer * {
-  color: #d4d4d4 !important; 
-}
+.footer .text-muted { color: var(--footer-text) !important; }
 .footer-content {
   padding-left: 10px; 
 }
 
 .page-bg {
-  min-height: calc(100vh - 120px);
   background: url("https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070")
   center/cover fixed no-repeat;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  background-color: var(--main-bg);
+  flex: 1 0 auto;
 }
 
 .page-bg .vs-panel,
 .page-bg .card {
-  background-color: rgba(37, 37, 38, 0.96); 
+  background-color: var(--page-surface-bg); 
 }
-.home-hero {
-  min-height: calc(100vh - 80px);
-  position: relative;
+
+.page-bg-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  text-shadow: 0 2px 5px rgba(0,0,0,0.7);
 }
 
-.home-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.45); 
-  z-index: 0;
-}
-
-.home-hero .content {
-  position: relative;
-  z-index: 1;
-}
+.container-max-700 { max-width: 700px; }
+.container-max-900 { max-width: 900px; }
+.container-max-1000 { max-width: 1000px; }

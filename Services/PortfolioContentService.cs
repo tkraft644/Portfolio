@@ -26,11 +26,17 @@ public class PortfolioContentService : IPortfolioContentService
             {
                 "C#",
                 ".NET",
+                "LINQ",
                 "ASP.NET Core",
+                "REST",
                 "Entity Framework Core",
+                "Autofac",
+                "xUnit",
                 "Angular (SPA)",
                 "TypeScript",
                 "WPF + MVVM",
+                "DevExpress",
+                "Docker",
                 "SQL Server"
             }
         };

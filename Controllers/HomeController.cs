@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Localization;
 using Portfolio.Models;
 using Portfolio.Services;
@@ -54,6 +55,7 @@ public class HomeController : Controller
     // POST: Contact – wysyłka CV
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [EnableRateLimiting("contact")]
     public async Task<IActionResult> Contact(ContactPageViewModel model, CancellationToken cancellationToken)
     {
         model.Info = _contentService.GetContactInfo();

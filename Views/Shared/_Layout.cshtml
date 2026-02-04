@@ -1,17 +1,34 @@
 ﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    string NavLinkClass(string controller, string action) =>
+        currentController == controller && currentAction == action
+            ? "nav-link vs-nav-link active"
+            : "nav-link vs-nav-link";
+
+    string? AriaCurrent(string controller, string action) =>
+        currentController == controller && currentAction == action ? "page" : null;
+}
+
 <!DOCTYPE html>
 <html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Portfolio</title>
-    <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Portfolio.styles.css" asp-append-version="true" />
+    <script src="~/js/theme.js" asp-append-version="true" defer></script>
 </head>
 <body>
+<a class="visually-hidden-focusable position-absolute top-0 start-0 m-2 p-2 bg-dark text-white rounded"
+   href="#main-content">
+    @Localizer["Nav.SkipToContent"]
+</a>
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-vs border-bottom box-shadow mb-3">
         <div class="container-fluid">
@@ -27,23 +44,39 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="About">
+                        <a class="@NavLinkClass("Home", "About")"
+                           aria-current="@AriaCurrent("Home", "About")"
+                           asp-controller="Home" asp-action="About">
                             @Localizer["Nav.About"]
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="Projects">
+                        <a class="@NavLinkClass("Home", "Projects")"
+                           aria-current="@AriaCurrent("Home", "Projects")"
+                           asp-controller="Home" asp-action="Projects">
                             @Localizer["Nav.Projects"]
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link vs-nav-link" asp-controller="Home" asp-action="Contact">
+                        <a class="@NavLinkClass("Home", "Contact")"
+                           aria-current="@AriaCurrent("Home", "Contact")"
+                           asp-controller="Home" asp-action="Contact">
                             @Localizer["Nav.Contact"]
                         </a>
                     </li>
                 </ul>
 
                 <ul class="navbar-nav">
+                    <li class="nav-item me-2 d-flex align-items-center">
+                        <button type="button"
+                                class="btn btn-outline-dark btn-sm"
+                                data-theme-toggle
+                                data-theme-label-dark="@Localizer["Theme.Dark"]"
+                                data-theme-label-light="@Localizer["Theme.Light"]"
+                                aria-pressed="false">
+                            <span data-theme-toggle-label>@Localizer["Theme.Dark"]</span>
+                        </button>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle vs-nav-link" href="#" id="langDropdown"
                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -76,7 +109,7 @@
     </nav>
 </header>
 
-<main role="main">
+<main role="main" id="main-content">
     @RenderBody()
 </main>
 

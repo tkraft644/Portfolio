@@ -24,4 +24,13 @@
   <data name="Nav.Language" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="Nav.SkipToContent" xml:space="preserve">
+    <value>Skip to content</value>
+  </data>
+  <data name="Theme.Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Theme.Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
 </root>

@@ -1,9 +1,11 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Net;
 using System.Net.Mail;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Portfolio.Models;
+using Portfolio.Observability;
 
 namespace Portfolio.Services;
 
@@ -22,6 +24,10 @@ public class SmtpCvEmailSender : ICvEmailSender
 
     public async Task SendCvAsync(string recipientEmail, CancellationToken cancellationToken = default)
     {
+        PortfolioTelemetry.CvSendAttempts.Add(1);
+        using var activity = PortfolioTelemetry.ActivitySource.StartActivity("cv.send");
+        var sw = Stopwatch.StartNew();
+
         if (!_emailSettings.Enabled)
         {
             throw new InvalidOperationException("CV sending is disabled.");
@@ -30,6 +36,12 @@ public class SmtpCvEmailSender : ICvEmailSender
         if (string.IsNullOrWhiteSpace(recipientEmail))
         {
             throw new ArgumentException("Recipient email is required.", nameof(recipientEmail));
+        }
+
+        var atIndex = recipientEmail.LastIndexOf('@');
+        if (atIndex >= 0 && atIndex < recipientEmail.Length - 1)
+        {
+            activity?.SetTag("recipient.domain", recipientEmail[(atIndex + 1)..].Trim());
         }
 
         if (string.IsNullOrWhiteSpace(_emailSettings.Host) ||
@@ -72,6 +84,22 @@ public class SmtpCvEmailSender : ICvEmailSender
             Credentials = new NetworkCredential(_emailSettings.User, _emailSettings.Password)
         };
 
-        await client.SendMailAsync(message);
+        try
+        {
+            await client.SendMailAsync(message);
+            PortfolioTelemetry.CvSendSuccesses.Add(1);
+            activity?.SetStatus(ActivityStatusCode.Ok);
+        }
+        catch
+        {
+            PortfolioTelemetry.CvSendFailures.Add(1);
+            activity?.SetStatus(ActivityStatusCode.Error);
+            throw;
+        }
+        finally
+        {
+            sw.Stop();
+            PortfolioTelemetry.CvSendDurationMs.Record(sw.Elapsed.TotalMilliseconds);
+        }
     }
 }

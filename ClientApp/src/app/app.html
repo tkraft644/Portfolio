@@ -1,33 +1,49 @@
-<header class="border-bottom bg-white">
-  <div class="container py-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
+<header class="border-bottom navbar-vs">
+  <div class="container-fluid py-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
     <div class="d-flex align-items-center gap-3">
-      <a class="text-decoration-none fw-bold" href="/">Tomasz Kraft Solutions</a>
+      <a class="text-decoration-none vs-title fw-bold" href="/">Tomasz Kraft Solutions</a>
       <span class="badge text-bg-dark">Angular SPA</span>
     </div>
 
     <nav class="d-flex flex-wrap gap-3">
-      <a routerLink="" routerLinkActive="fw-bold" [routerLinkActiveOptions]="{ exact: true }"
-        class="text-decoration-none">
+      <a
+        routerLink=""
+        routerLinkActive="active fw-bold"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="vs-nav-link"
+      >
         Overview
       </a>
-      <a routerLink="projects" routerLinkActive="fw-bold" class="text-decoration-none">Projects</a>
-      <a routerLink="about" routerLinkActive="fw-bold" class="text-decoration-none">About</a>
-      <a routerLink="contact" routerLinkActive="fw-bold" class="text-decoration-none">Contact</a>
+      <a routerLink="projects" routerLinkActive="active fw-bold" class="vs-nav-link">Projects</a>
+      <a routerLink="about" routerLinkActive="active fw-bold" class="vs-nav-link">About</a>
+      <a routerLink="contact" routerLinkActive="active fw-bold" class="vs-nav-link">Contact</a>
     </nav>
 
     <div class="d-flex gap-2">
-      <a class="btn btn-outline-secondary btn-sm" href="/Language/Set?culture=pl&returnUrl=/app/">PL</a>
-      <a class="btn btn-outline-secondary btn-sm" href="/Language/Set?culture=en&returnUrl=/app/">EN</a>
+      <button
+        type="button"
+        class="btn btn-outline-dark btn-sm"
+        (click)="toggleTheme()"
+        [attr.aria-pressed]="theme === 'dark'"
+      >
+        {{ theme === 'dark' ? 'Dark' : 'Light' }}
+      </button>
+      <a class="btn btn-outline-dark btn-sm" href="/Language/Set?culture=pl&returnUrl=/app/">PL</a>
+      <a class="btn btn-outline-dark btn-sm" href="/Language/Set?culture=en&returnUrl=/app/">EN</a>
     </div>
   </div>
 </header>
 
-<main class="container py-4">
-  <router-outlet></router-outlet>
+<main role="main">
+  <div class="page-bg">
+    <div class="container py-4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </main>
 
-<footer class="border-top">
-  <div class="container py-3 small text-muted">
+<footer class="border-top footer">
+  <div class="footer-content">
     <a href="/" class="text-muted">Back to MVC views</a>
   </div>
 </footer>

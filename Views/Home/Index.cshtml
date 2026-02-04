@@ -6,49 +6,36 @@
     ViewData["Title"] = Localizer["Home.Title"];
 }
 
-<div class="home-hero" style="
-    background: url('@Model.HeroBackgroundUrl') center/cover no-repeat !important;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.7);
-    position: relative;
-">
-    <div style="
-        position: absolute;
-        inset: 0;
-        background: rgba(0,0,0,0.45);
-    "></div>
+<div class="page-bg page-bg-center" style="background-image: url('@Model.HeroBackgroundUrl');">
+    <div class="container py-5 container-max-900">
+        <div class="vs-panel text-center">
+            <h1 class="display-4 fw-bold mb-2">@Model.Name</h1>
 
-    <div class="text-center" style="position: relative; z-index: 1;">
-        <h1 class="display-3 fw-bold">@Model.Name</h1>
+            <p class="lead mb-0">
+                @Localizer["Home.RoleExperience", Model.Role, Model.YearsOfExperience]
+            </p>
 
-        <p class="lead mt-3">
-            @Localizer["Home.RoleExperience", Model.Role, Model.YearsOfExperience]
-        </p>
+            <p class="mt-4 mb-3">
+                @Localizer["Home.DailyTech"]
+            </p>
 
-        <p class="mt-4">
-            @Localizer["Home.DailyTech"]
-        </p>
-
-        <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
-            @foreach (var tech in Model.MainTechnologies)
-            {
-                if (tech == "Angular (SPA)")
+            <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+                @foreach (var tech in Model.MainTechnologies)
                 {
-                    <a class="badge bg-secondary text-white text-decoration-none" href="/app/">@tech</a>
+                    if (tech == "Angular (SPA)")
+                    {
+                        <a class="badge bg-secondary text-decoration-none" href="/app/">@tech</a>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">@tech</span>
+                    }
                 }
-                else
-                {
-                    <span class="badge bg-secondary">@tech</span>
-                }
-            }
+            </div>
+
+            <a asp-controller="Home" asp-action="About" class="btn btn-secondary btn-lg">
+                @Localizer["Home.AboutMe"]
+            </a>
         </div>
-
-        <a asp-controller="Home" asp-action="About" class="btn btn-secondary btn-lg">
-            @Localizer["Home.AboutMe"]
-        </a>
     </div>
 </div>

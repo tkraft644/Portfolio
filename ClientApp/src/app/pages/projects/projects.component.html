@@ -1,0 +1,50 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <ng-container *ngIf="isReady(vm)">
+    <h1 class="h3 mb-4">Projects</h1>
+
+    <div class="row">
+      <div class="col-md-6 mb-4" *ngFor="let p of vm.data.projects">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h4 class="card-title">{{ p.title }}</h4>
+            <h6 class="card-subtitle mb-2 text-muted">{{ p.company }}</h6>
+            <p class="card-text mt-3">{{ p.description }}</p>
+            <div class="d-flex flex-wrap gap-2">
+              <span *ngFor="let tech of p.technologies" class="badge text-bg-secondary">{{ tech }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-5" />
+
+    <h2 class="h4 mb-4">Challenges</h2>
+    <div class="row">
+      <div class="col-12 mb-3" *ngFor="let c of vm.data.challenges">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">{{ c.title }}</h5>
+            <p class="card-text mb-0">{{ c.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isLoading(vm)">
+    <div class="vs-panel placeholder-glow">
+      <div class="placeholder w-25 mb-4"></div>
+      <div class="placeholder w-100 mb-2"></div>
+      <div class="placeholder w-75 mb-4"></div>
+      <div class="placeholder w-50 mb-3"></div>
+      <div class="placeholder w-100 mb-2"></div>
+      <div class="placeholder w-100 mb-2"></div>
+      <div class="placeholder w-75"></div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isError(vm)">
+    <div class="alert alert-danger mb-0">{{ vm.message }}</div>
+  </ng-container>
+</ng-container>

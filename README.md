@@ -37,6 +37,22 @@ cd ClientApp
 npm start
 ```
 
+## Observability
+- Health checks:
+  - `GET /health`
+  - `GET /health/live`
+  - `GET /health/ready`
+- Basic telemetry (counters + duration) for CV sending is emitted via `System.Diagnostics.Metrics` under `Portfolio` meter.
+
+## Security
+- Security headers + Content Security Policy are added globally.
+- Rate limiting is enabled for `POST /Home/Contact` (CV e-mail form).
+
+## Tests
+```bash
+dotnet test
+```
+
 ## Build Angular (optional)
 By default `dotnet build` does **not** build the Angular app (to keep backend builds fast and independent from Node).
 

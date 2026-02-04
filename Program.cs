@@ -1,11 +1,18 @@
 using Portfolio.Models;
+using Portfolio.Observability;
 using Portfolio.Services;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using System.Globalization;
+using System.Text.Json;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(options => { options.AddServerHeader = false; });
 
 // Email settings
 builder.Services.AddOptions<EmailSettings>()
@@ -37,6 +44,38 @@ builder.Services.AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
 
+// Observability
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy())
+    .AddCheck<CvPdfHealthCheck>("cv_pdf", tags: ["ready"]);
+
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields =
+        HttpLoggingFields.RequestPropertiesAndHeaders |
+        HttpLoggingFields.ResponsePropertiesAndHeaders |
+        HttpLoggingFields.Duration;
+});
+
+// Security
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    options.AddPolicy("contact", context =>
+    {
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+        return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 5,
+            Window = TimeSpan.FromMinutes(1),
+            QueueLimit = 0,
+            AutoReplenishment = true
+        });
+    });
+});
+
 // App services
 builder.Services.AddSingleton<IExperienceCalculator, ExperienceCalculator>();
 builder.Services.AddSingleton<IPortfolioContentService, PortfolioContentService>();
@@ -54,6 +93,45 @@ app.UseHttpsRedirection();
 
 var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(locOptions.Value);
+
+app.Use(async (context, next) =>
+{
+    context.Response.OnStarting(() =>
+    {
+        context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+        context.Response.Headers["X-Frame-Options"] = "DENY";
+        context.Response.Headers["Referrer-Policy"] = "no-referrer";
+        context.Response.Headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
+        context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin";
+
+        var csp = BuildCspHeaderValue(context.Request.IsHttps);
+        context.Response.Headers["Content-Security-Policy"] = csp;
+
+        return Task.CompletedTask;
+    });
+
+    await next();
+});
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpLogging();
+}
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = WriteHealthResponse
+});
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = check => check.Name == "self",
+    ResponseWriter = WriteHealthResponse
+});
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready"),
+    ResponseWriter = WriteHealthResponse
+});
 
 app.UseStaticFiles();
 
@@ -102,6 +180,7 @@ else
 
 app.UseRouting();
 
+app.UseRateLimiter();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -121,3 +200,51 @@ if (Directory.Exists(angularBrowserRoot))
 }
 
 app.Run();
+
+static Task WriteHealthResponse(HttpContext context, Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report)
+{
+    context.Response.ContentType = "application/json; charset=utf-8";
+
+    var payload = new
+    {
+        status = report.Status.ToString(),
+        checks = report.Entries.Select(entry => new
+        {
+            name = entry.Key,
+            status = entry.Value.Status.ToString(),
+            description = entry.Value.Description
+        })
+    };
+
+    return context.Response.WriteAsync(JsonSerializer.Serialize(payload, new JsonSerializerOptions
+    {
+        WriteIndented = true
+    }));
+}
+
+static string BuildCspHeaderValue(bool isHttps)
+{
+    var directives = new List<string>
+    {
+        "default-src 'self'",
+        "base-uri 'self'",
+        "object-src 'none'",
+        "frame-ancestors 'none'",
+        "form-action 'self'",
+        "img-src 'self' data: https:",
+        "font-src 'self' data:",
+        "connect-src 'self'",
+        // Inline styles are needed (MVC uses small inline style attrs; Angular also sets styles dynamically).
+        "style-src 'self' 'unsafe-inline'",
+        "script-src 'self'"
+    };
+
+    if (isHttps)
+    {
+        directives.Add("upgrade-insecure-requests");
+    }
+
+    return string.Join("; ", directives);
+}
+
+public partial class Program { }

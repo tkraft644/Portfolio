@@ -7,11 +7,13 @@
 }
 
 <div class="page-bg">
-    <div class="container py-5" style="max-width: 1000px;">
+    <div class="container py-5 container-max-1000">
 
-        <h1 class="mb-4">
-            @Localizer["Projects.Heading"]
-        </h1>
+        <div class="vs-panel mb-4">
+            <h1 class="mb-0">
+                @Localizer["Projects.Heading"]
+            </h1>
+        </div>
 
         <div class="row">
             @foreach (var p in Model.Projects)
@@ -51,9 +53,11 @@
 
         <hr class="my-5"/>
 
-        <h2 class="mb-4">
-            @Localizer["Projects.Challenges"]
-        </h2>
+        <div class="vs-panel mb-4">
+            <h2 class="mb-0">
+                @Localizer["Projects.Challenges"]
+            </h2>
+        </div>
 
         <div class="row">
             @foreach (var c in Model.Challenges)
