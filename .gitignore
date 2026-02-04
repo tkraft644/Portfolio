@@ -15,6 +15,7 @@ pnpm-debug.log*
 # IDEs / editors
 .idea/
 .vscode/
+*.DotSettings.user
 
 # OS
 .DS_Store

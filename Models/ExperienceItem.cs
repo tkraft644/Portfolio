@@ -11,6 +11,8 @@ public class ExperienceItem
 
     public IList<string> Responsibilities { get; set; } = new List<string>();
 
+    public string PeriodText => GetPeriodText();
+
     public string GetPeriodText()
     {
         var from = From.ToString("MMMM yyyy");

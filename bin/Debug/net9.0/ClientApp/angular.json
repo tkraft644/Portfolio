@@ -32,11 +32,19 @@
               }
             ],
             "styles": [
+              "../wwwroot/lib/bootstrap/dist/css/bootstrap.min.css",
+              "../wwwroot/css/site.css",
               "src/styles.scss"
             ]
           },
           "configurations": {
             "production": {
+              "baseHref": "/app/",
+              "optimization": {
+                "styles": {
+                  "inlineCritical": false
+                }
+              },
               "budgets": [
                 {
                   "type": "initial",

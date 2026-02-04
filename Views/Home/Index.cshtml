@@ -36,7 +36,14 @@
         <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
             @foreach (var tech in Model.MainTechnologies)
             {
-                <span class="badge bg-secondary">@tech</span>
+                if (tech == "Angular (SPA)")
+                {
+                    <a class="badge bg-secondary text-white text-decoration-none" href="/app/">@tech</a>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">@tech</span>
+                }
             }
         </div>
 

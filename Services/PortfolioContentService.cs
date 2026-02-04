@@ -28,6 +28,8 @@ public class PortfolioContentService : IPortfolioContentService
                 ".NET",
                 "ASP.NET Core",
                 "Entity Framework Core",
+                "Angular (SPA)",
+                "TypeScript",
                 "WPF + MVVM",
                 "SQL Server"
             }
