@@ -250,7 +250,7 @@ public class PortfolioContentService : IPortfolioContentService
             Phone = "+48 668 005 812",
             SocialLinks = new List<SocialLink>
             {
-                new() { Name = "LinkedIn", Url = "https://www.linkedin.com/in/tomek-kraft-760337252/" },
+                new() { Name = "LinkedIn", Url = "https://www.linkedin.com/in/tomasz-kraft-760337252/" },
                 new() { Name = "GitHub", Url = "https://github.com/tkraft644" }
             }
         };
