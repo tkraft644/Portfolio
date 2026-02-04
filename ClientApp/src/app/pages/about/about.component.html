@@ -13,6 +13,20 @@
       <li *ngFor="let hobby of vm.data.hobbies">{{ hobby }}</li>
     </ul>
 
+    <h2 class="h4 mt-5 mb-3">Education</h2>
+    <div class="card shadow-sm mb-3" *ngFor="let edu of vm.data.education">
+      <div class="card-body">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+          <div>
+            <h4 class="mb-1">{{ edu.school }}</h4>
+          </div>
+          <div class="mt-2 mt-md-0">
+            <span class="badge text-bg-light border">{{ edu.periodText }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <hr class="my-5" />
 
     <h2 class="h4 mb-4">Experience</h2>

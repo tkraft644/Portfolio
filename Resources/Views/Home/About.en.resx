@@ -21,6 +21,9 @@
   <data name="About.Interests" xml:space="preserve">
     <value>Interests</value>
   </data>
+  <data name="About.Education" xml:space="preserve">
+    <value>Education</value>
+  </data>
   <data name="About.Experience" xml:space="preserve">
     <value>Experience</value>
   </data>

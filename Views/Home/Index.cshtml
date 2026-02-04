@@ -6,7 +6,7 @@
     ViewData["Title"] = Localizer["Home.Title"];
 }
 
-<div class="page-bg page-bg-center" style="background-image: url('@Model.HeroBackgroundUrl');">
+<div class="page-bg page-bg-center">
     <div class="container py-5 container-max-900">
         <div class="vs-panel text-center">
             <h1 class="display-4 fw-bold mb-2">@Model.Name</h1>
@@ -33,9 +33,19 @@
                 }
             </div>
 
-            <a asp-controller="Home" asp-action="About" class="btn btn-secondary btn-lg">
-                @Localizer["Home.AboutMe"]
-            </a>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a asp-controller="Home" asp-action="About" class="btn btn-secondary btn-lg">
+                    @Localizer["Home.AboutMe"]
+                </a>
+
+                <a asp-controller="Home" asp-action="Projects" class="btn btn-secondary btn-lg">
+                    @Localizer["Home.Projects"]
+                </a>
+
+                <a asp-controller="Home" asp-action="Contact" class="btn btn-secondary btn-lg">
+                    @Localizer["Home.Contact"]
+                </a>
+            </div>
         </div>
     </div>
 </div>

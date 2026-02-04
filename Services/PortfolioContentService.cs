@@ -22,6 +22,7 @@ public class PortfolioContentService : IPortfolioContentService
             Name = "Tomasz Kraft",
             Role = ".NET Developer",
             YearsOfExperience = yearsOfExperience,
+            HeroBackgroundUrl = "/img/hero-dotnet-code.svg",
             MainTechnologies = new List<string>
             {
                 "C#",
@@ -69,6 +70,38 @@ public class PortfolioContentService : IPortfolioContentService
                     "Fotografia",
                     "Motoryzacja Off-Road",
                     "Nowe technologie"
+                },
+
+            Education = isEnglish
+                ? new List<EducationItem>
+                {
+                    new()
+                    {
+                        School = "West Pomeranian University of Technology, Szczecin",
+                        From = new DateTime(2018, 9, 30),
+                        To = new DateTime(2020, 9, 22)
+                    },
+                    new()
+                    {
+                        School = "Adam Mickiewicz University, Poznań",
+                        From = new DateTime(2020, 9, 24),
+                        To = new DateTime(2023, 4, 17)
+                    }
+                }
+                : new List<EducationItem>
+                {
+                    new()
+                    {
+                        School = "Zachodniopomorski Uniwersytet Technologiczny",
+                        From = new DateTime(2018, 9, 30),
+                        To = new DateTime(2020, 9, 22)
+                    },
+                    new()
+                    {
+                        School = "Uniwersytet im. Adama Mickiewicza",
+                        From = new DateTime(2020, 9, 24),
+                        To = new DateTime(2023, 4, 17)
+                    }
                 },
 
             Experience = new List<ExperienceItem>

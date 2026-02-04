@@ -31,9 +31,17 @@ export interface ExperienceItem {
   periodText: string;
 }
 
+export interface EducationItem {
+  school: string;
+  from: string;
+  to?: string | null;
+  periodText: string;
+}
+
 export interface AboutModel {
   bio: string;
   hobbies: string[];
+  education: EducationItem[];
   experience: ExperienceItem[];
 }
 

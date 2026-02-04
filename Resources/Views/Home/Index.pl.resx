@@ -24,4 +24,10 @@
   <data name="Home.AboutMe" xml:space="preserve">
     <value>O mnie</value>
   </data>
+  <data name="Home.Projects" xml:space="preserve">
+    <value>Projekty</value>
+  </data>
+  <data name="Home.Contact" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
 </root>

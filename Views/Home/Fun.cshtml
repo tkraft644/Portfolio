@@ -1,0 +1,50 @@
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Fun.Title"];
+}
+
+<div class="page-bg">
+    <div class="container py-5 container-max-900">
+        <div class="vs-panel">
+            <h1 class="mb-2">@Localizer["Fun.Heading"]</h1>
+            <p class="text-muted mb-4">@Localizer["Fun.Subtitle"]</p>
+
+            <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                <span class="badge bg-secondary">
+                    @Localizer["Fun.Score"]: <span data-dino-score>0</span>
+                </span>
+                <span class="badge bg-secondary">
+                    @Localizer["Fun.Best"]: <span data-dino-best>0</span>
+                </span>
+
+                <button type="button" class="btn btn-secondary btn-sm" data-dino-restart>
+                    @Localizer["Fun.Restart"]
+                </button>
+            </div>
+
+            <div class="dino-canvas-container">
+                <canvas id="dino-canvas"
+                        class="dino-canvas"
+                        width="900"
+                        height="240"
+                        role="img"
+                        aria-label="@Localizer["Fun.CanvasLabel"]"></canvas>
+
+                <div class="dino-overlay" data-dino-overlay>
+                    <div class="h5 mb-1">@Localizer["Fun.OverlayTitle"]</div>
+                    <div class="dino-overlay-subtitle"
+                         data-dino-start="@Localizer["Fun.OverlayStart"]"
+                         data-dino-gameover="@Localizer["Fun.OverlayGameOver"]"
+                         data-dino-paused="@Localizer["Fun.OverlayPaused"]"></div>
+                    <div class="small text-muted mt-2">@Localizer["Fun.Controls"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/dino.js" asp-append-version="true" defer></script>
+}
+

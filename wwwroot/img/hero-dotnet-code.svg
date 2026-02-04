@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M 64 0 H 0 V 64" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <path d="M 32 0 V 64 M 0 32 H 64" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    </pattern>
+
+    <filter id="soften" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="0.8"/>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect width="1920" height="1080" fill="url(#grid)" opacity="0.9"/>
+
+  <g transform="translate(180 250) rotate(-12)" filter="url(#soften)">
+    <text x="0" y="0"
+          font-size="24"
+          font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
+          fill="rgba(156,220,254,0.18)">
+      <tspan x="0" dy="0">using Microsoft.AspNetCore.Builder;</tspan>
+      <tspan x="0" dy="36">using Microsoft.Extensions.DependencyInjection;</tspan>
+      <tspan x="0" dy="36"></tspan>
+      <tspan x="0" dy="36">var builder = WebApplication.CreateBuilder(args);</tspan>
+      <tspan x="0" dy="36">builder.Services.AddControllersWithViews();</tspan>
+      <tspan x="0" dy="36">builder.Services.AddHealthChecks();</tspan>
+      <tspan x="0" dy="36"></tspan>
+      <tspan x="0" dy="36">var app = builder.Build();</tspan>
+      <tspan x="0" dy="36">app.UseHttpsRedirection();</tspan>
+      <tspan x="0" dy="36">app.UseStaticFiles();</tspan>
+      <tspan x="0" dy="36">app.MapControllers();</tspan>
+      <tspan x="0" dy="36">app.MapHealthChecks("/health");</tspan>
+      <tspan x="0" dy="36">app.Run();</tspan>
+    </text>
+  </g>
+
+  <g opacity="0.35">
+    <circle cx="1540" cy="280" r="220" fill="rgba(0,122,204,0.10)"/>
+    <circle cx="1480" cy="340" r="320" fill="rgba(156,220,254,0.06)"/>
+  </g>
+</svg>

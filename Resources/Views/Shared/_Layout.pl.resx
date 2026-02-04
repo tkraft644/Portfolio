@@ -18,6 +18,9 @@
   <data name="Nav.Projects" xml:space="preserve">
     <value>Projekty</value>
   </data>
+  <data name="Nav.Fun" xml:space="preserve">
+    <value>Mini gra</value>
+  </data>
   <data name="Nav.Contact" xml:space="preserve">
     <value>Kontakt</value>
   </data>

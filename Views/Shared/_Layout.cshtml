@@ -58,6 +58,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="@NavLinkClass("Home", "Fun")"
+                           aria-current="@AriaCurrent("Home", "Fun")"
+                           asp-controller="Home" asp-action="Fun">
+                            @Localizer["Nav.Fun"]
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="@NavLinkClass("Home", "Contact")"
                            aria-current="@AriaCurrent("Home", "Contact")"
                            asp-controller="Home" asp-action="Contact">
@@ -115,7 +122,7 @@
 
 <footer class="border-top footer">
     <div class="footer-content">
-        &copy; 2025 - Tomasz Kraft Solutions
+        &copy; 2026 - Tomasz Kraft Solutions
     </div>
 </footer>
 

@@ -39,6 +39,11 @@ public class HomeController : Controller
         return View(_contentService.GetProjectsModel());
     }
 
+    public IActionResult Fun()
+    {
+        return View();
+    }
+
     // GET: Contact
     [HttpGet]
     public IActionResult Contact()
