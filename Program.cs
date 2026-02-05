@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Portfolio.Data;
 using Portfolio.Models;
 using Portfolio.Observability;
 using Portfolio.Services;
@@ -78,10 +80,32 @@ builder.Services.AddRateLimiter(options =>
 
 // App services
 builder.Services.AddSingleton<IExperienceCalculator, ExperienceCalculator>();
-builder.Services.AddSingleton<IPortfolioContentService, PortfolioContentService>();
 builder.Services.AddTransient<ICvEmailSender, SmtpCvEmailSender>();
 
+var portfolioDbConnectionString = builder.Configuration.GetConnectionString("Portfolio");
+if (!string.IsNullOrWhiteSpace(portfolioDbConnectionString))
+{
+    builder.Services.AddDbContext<PortfolioDbContext>(options =>
+        options.UseSqlServer(
+            portfolioDbConnectionString,
+            sql => sql.EnableRetryOnFailure()));
+
+    builder.Services.AddScoped<PortfolioDbSeeder>();
+    builder.Services.AddScoped<IPortfolioContentService, EfCorePortfolioContentService>();
+}
+else
+{
+    builder.Services.AddScoped<IPortfolioContentService, PortfolioContentService>();
+}
+
 var app = builder.Build();
+
+if (!app.Environment.IsEnvironment("Testing") && !string.IsNullOrWhiteSpace(portfolioDbConnectionString))
+{
+    using var scope = app.Services.CreateScope();
+    var seeder = scope.ServiceProvider.GetRequiredService<PortfolioDbSeeder>();
+    await seeder.SeedAsync();
+}
 
 if (!app.Environment.IsDevelopment())
 {

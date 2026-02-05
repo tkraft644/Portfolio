@@ -1,10 +1,26 @@
 services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:-Your_password123!}"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
   portfolio:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    depends_on:
+      - mssql
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       EmailSettings__Enabled: "false"
+      ConnectionStrings__Portfolio: "Server=mssql,1433;Database=portfolio;User Id=sa;Password=${MSSQL_SA_PASSWORD:-Your_password123!};TrustServerCertificate=True"
+
+volumes:
+  mssql_data:

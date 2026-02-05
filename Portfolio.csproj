@@ -14,6 +14,10 @@
   <ItemGroup>
     <Compile Remove="Portfolio.Tests\**\*.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+  </ItemGroup>
   
   <Target Name="BuildClientApp" BeforeTargets="Publish"
           Condition="Exists('ClientApp/package.json') AND '$(ClientAppBuilt)' != 'true'">

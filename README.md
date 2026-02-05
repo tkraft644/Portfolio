@@ -15,11 +15,20 @@ Then open:
 - `http://localhost:8080/` (MVC views)
 - `http://localhost:8080/app/` (Angular SPA demo)
 
+The app uses **EF Core + SQL Server** in Docker Compose and seeds the database on first run.
+
 Alternatively (without Compose):
 ```bash
 docker build -t portfolio .
 docker run --rm -p 8080:8080 -e ASPNETCORE_ENVIRONMENT=Production -e EmailSettings__Enabled=false portfolio
 ```
+
+## Database (EF Core + SQL Server)
+If `ConnectionStrings:Portfolio` is set, the app reads portfolio content from SQL Server via EF Core and seeds it automatically.
+
+- Docker Compose sets the connection string automatically (service name `mssql`).
+- For local run you can point it at your own SQL Server instance:
+  - `ConnectionStrings__Portfolio="Server=localhost,1433;Database=portfolio;User Id=sa;Password=...;TrustServerCertificate=True"`
 
 ## Run (backend)
 ```bash
