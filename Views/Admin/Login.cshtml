@@ -1,0 +1,33 @@
+@model Portfolio.Models.AdminLoginViewModel
+
+@{
+    ViewData["Title"] = "Admin login";
+}
+
+<div class="page-bg">
+    <div class="container py-5 container-max-700">
+        <div class="vs-panel">
+            <h1 class="mb-3">Admin</h1>
+            <p class="text-muted mb-4">Logowanie do panelu zarządzania danymi w bazie.</p>
+
+            <form method="post" class="mb-0">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="ReturnUrl"/>
+
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Hasło</label>
+                    <input asp-for="Password"
+                           class="form-control"
+                           type="password"
+                           autocomplete="current-password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-secondary">
+                    Zaloguj
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+

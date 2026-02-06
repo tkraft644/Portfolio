@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # Local overrides (keep real appsettings tracked)
 appsettings.*.local.json
+
+# Local env vars (Docker Compose)
+.env

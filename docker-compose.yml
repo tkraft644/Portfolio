@@ -5,7 +5,8 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:-Your_password123!}"
     ports:
-      - "1433:1433"
+      # Bind only to localhost so it is not exposed publicly on a VPS.
+      - "127.0.0.1:1433:1433"
     volumes:
       - mssql_data:/var/opt/mssql
 
@@ -20,7 +21,12 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       EmailSettings__Enabled: "false"
+      Admin__Enabled: "${ADMIN_ENABLED:-false}"
+      Admin__Password: "${ADMIN_PASSWORD:-}"
       ConnectionStrings__Portfolio: "Server=mssql,1433;Database=portfolio;User Id=sa;Password=${MSSQL_SA_PASSWORD:-Your_password123!};TrustServerCertificate=True"
+    volumes:
+      - portfolio_keys:/root/.aspnet/DataProtection-Keys
 
 volumes:
   mssql_data:
+  portfolio_keys:

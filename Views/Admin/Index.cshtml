@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Admin";
+    var profileName = (string?)ViewData["ProfileName"];
+    var profileRole = (string?)ViewData["ProfileRole"];
+    var success = (string?)TempData["Admin.Success"];
+}
+
+<div class="page-bg">
+    <div class="container py-5 container-max-900">
+        <div class="vs-panel">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <h1 class="mb-1">Admin</h1>
+                    <div class="text-muted">Zarządzanie danymi w SQL Server (EF Core).</div>
+                    @if (!string.IsNullOrWhiteSpace(profileName))
+                    {
+                        <div class="mt-2">
+                            <span class="badge bg-secondary">@profileName</span>
+                            @if (!string.IsNullOrWhiteSpace(profileRole))
+                            {
+                                <span class="badge bg-secondary">@profileRole</span>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <form method="post" asp-controller="AdminAuth" asp-action="Logout" class="mb-0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-dark btn-sm">Wyloguj</button>
+                </form>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(success))
+            {
+                <div class="alert alert-success mt-4 mb-0">@success</div>
+            }
+
+            <hr class="my-4"/>
+
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-secondary btn-sm" asp-controller="Admin" asp-action="Profile">
+                    Profil
+                </a>
+                <a class="btn btn-secondary btn-sm" asp-controller="Admin" asp-action="Technologies">
+                    Technologie
+                </a>
+                <a class="btn btn-secondary btn-sm" asp-controller="Admin" asp-action="SocialLinks">
+                    Social links
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

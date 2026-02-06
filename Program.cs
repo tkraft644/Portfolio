@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Portfolio.Data;
 using Portfolio.Models;
@@ -30,6 +31,11 @@ builder.Services.AddOptions<EmailSettings>()
         "EmailSettings is enabled but incomplete.")
     .ValidateOnStart();
 
+builder.Services.AddOptions<AdminSettings>()
+    .Bind(builder.Configuration.GetSection("Admin"))
+    .Validate(settings => !settings.Enabled || !string.IsNullOrWhiteSpace(settings.Password), "Admin is enabled but password is missing.")
+    .ValidateOnStart();
+
 // Localization
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.Configure<RequestLocalizationOptions>(options =>
@@ -60,6 +66,26 @@ builder.Services.AddHttpLogging(options =>
 });
 
 // Security
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/admin/login";
+        options.AccessDeniedPath = "/admin/login";
+        options.Cookie.Name = "portfolio_admin";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+        options.SlidingExpiration = true;
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireAuthenticatedUser()
+            .RequireClaim("admin", "true"));
+});
+
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -205,6 +231,7 @@ else
 app.UseRouting();
 
 app.UseRateLimiter();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
