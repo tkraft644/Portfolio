@@ -221,6 +221,34 @@ body a:hover {
 .navbar-vs {
   background-color: var(--navbar-bg) !important;
   border-bottom: 1px solid var(--navbar-border) !important;
+
+  /* Make hamburger visible in both themes (Bootstrap uses CSS vars for it). */
+  --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(17, 24, 39, 0.85)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  --vs-navbar-toggler-border: rgba(17, 24, 39, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .navbar-vs {
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    --vs-navbar-toggler-border: rgba(255, 255, 255, 0.25);
+  }
+}
+
+:root[data-theme="dark"] .navbar-vs {
+  --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  --vs-navbar-toggler-border: rgba(255, 255, 255, 0.25);
+}
+
+.navbar-vs .navbar-toggler {
+  border-color: var(--vs-navbar-toggler-border);
+}
+
+.navbar-vs .navbar-toggler:hover {
+  background-color: rgba(0, 122, 204, 0.08);
+}
+
+.navbar-vs .navbar-toggler:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 122, 204, 0.25);
 }
 
 .vs-title {
