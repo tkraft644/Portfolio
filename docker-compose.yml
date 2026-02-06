@@ -1,6 +1,7 @@
 services:
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:-Your_password123!}"
@@ -16,6 +17,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    restart: unless-stopped
     depends_on:
       - mssql
     environment:
