@@ -1,0 +1,87 @@
+@model Portfolio.Models.AdminExperienceListViewModel
+
+@{
+    ViewData["Title"] = "Admin - Doświadczenie";
+    var success = (string?)TempData["Admin.Success"];
+}
+
+<div class="page-bg">
+    <div class="container py-5 container-max-900">
+        <div class="vs-panel">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <h1 class="mb-1">Doświadczenie</h1>
+                    <div class="text-muted">Zarządzanie sekcją „Doświadczenie” na stronie „O mnie”.</div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-outline-dark btn-sm" asp-controller="Admin" asp-action="Index">Powrót</a>
+                    <a class="btn btn-secondary btn-sm" asp-controller="Admin" asp-action="ExperienceCreate">Dodaj</a>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(success))
+            {
+                <div class="alert alert-success mt-4 mb-0">@success</div>
+            }
+
+            <div class="table-responsive mt-4">
+                <table class="table table-sm align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th scope="col">Firma</th>
+                        <th scope="col">Stanowisko</th>
+                        <th scope="col">Od</th>
+                        <th scope="col">Do</th>
+                        <th scope="col">Odp.</th>
+                        <th scope="col" class="text-end">Akcje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model.Items.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6" class="text-muted py-4">Brak pozycji doświadczenia.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@item.Company</td>
+                                <td>@item.Position</td>
+                                <td>@item.From.ToString("yyyy-MM-dd")</td>
+                                <td>@(item.To?.ToString("yyyy-MM-dd") ?? "—")</td>
+                                <td><span class="badge bg-secondary">@item.ResponsibilitiesCount</span></td>
+                                <td class="text-end">
+                                    <div class="d-inline-flex gap-2">
+                                        <a class="btn btn-outline-dark btn-sm"
+                                           asp-controller="Admin"
+                                           asp-action="ExperienceEdit"
+                                           asp-route-id="@item.Id">
+                                            Edytuj
+                                        </a>
+                                        <form method="post"
+                                              asp-controller="Admin"
+                                              asp-action="ExperienceDelete"
+                                              asp-route-id="@item.Id"
+                                              class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit"
+                                                    class="btn btn-outline-dark btn-sm"
+                                                    onclick="return confirm('Usunąć tę pozycję?');">
+                                                Usuń
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

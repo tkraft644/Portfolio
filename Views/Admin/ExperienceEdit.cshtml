@@ -1,0 +1,62 @@
+@model Portfolio.Models.AdminExperienceEditViewModel
+
+@{
+    var isNew = Model.Id == 0;
+    ViewData["Title"] = isNew ? "Admin - Doświadczenie - Dodaj" : "Admin - Doświadczenie - Edytuj";
+    var heading = isNew ? "Dodaj doświadczenie" : "Edytuj doświadczenie";
+}
+
+<div class="page-bg">
+    <div class="container py-5 container-max-900">
+        <div class="vs-panel">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <h1 class="mb-1">@heading</h1>
+                    <div class="text-muted">Odpowiedzialności wpisuj w formacie: <code>PL | EN</code> (jedna linia = jedna pozycja).</div>
+                </div>
+                <a class="btn btn-outline-dark btn-sm" asp-controller="Admin" asp-action="Experience">Powrót</a>
+            </div>
+
+            <form method="post" asp-controller="Admin" asp-action="ExperienceSave" class="mt-4">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id"/>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Company" class="form-label">Firma</label>
+                        <input asp-for="Company" class="form-control"/>
+                        <span asp-validation-for="Company" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Position" class="form-label">Stanowisko</label>
+                        <input asp-for="Position" class="form-control"/>
+                        <span asp-validation-for="Position" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="From" class="form-label">Od</label>
+                        <input asp-for="From" class="form-control" type="date"/>
+                        <span asp-validation-for="From" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="To" class="form-label">Do (opcjonalnie)</label>
+                        <input asp-for="To" class="form-control" type="date"/>
+                        <span asp-validation-for="To" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Responsibilities" class="form-label">Odpowiedzialności</label>
+                        <textarea asp-for="Responsibilities" class="form-control" rows="10" spellcheck="false"></textarea>
+                        <span asp-validation-for="Responsibilities" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-secondary">Zapisz</button>
+                    <a class="btn btn-outline-dark" asp-controller="Admin" asp-action="Experience">Anuluj</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

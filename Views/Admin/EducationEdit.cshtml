@@ -1,0 +1,56 @@
+@model Portfolio.Models.AdminEducationEditViewModel
+
+@{
+    var isNew = Model.Id == 0;
+    ViewData["Title"] = isNew ? "Admin - Edukacja - Dodaj" : "Admin - Edukacja - Edytuj";
+    var heading = isNew ? "Dodaj edukację" : "Edytuj edukację";
+}
+
+<div class="page-bg">
+    <div class="container py-5 container-max-900">
+        <div class="vs-panel">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <h1 class="mb-1">@heading</h1>
+                    <div class="text-muted">Uzupełnij pola w PL i EN oraz zakres dat.</div>
+                </div>
+                <a class="btn btn-outline-dark btn-sm" asp-controller="Admin" asp-action="Education">Powrót</a>
+            </div>
+
+            <form method="post" asp-controller="Admin" asp-action="EducationSave" class="mt-4">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id"/>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="SchoolPl" class="form-label">Uczelnia (PL)</label>
+                        <input asp-for="SchoolPl" class="form-control"/>
+                        <span asp-validation-for="SchoolPl" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="SchoolEn" class="form-label">University (EN)</label>
+                        <input asp-for="SchoolEn" class="form-control"/>
+                        <span asp-validation-for="SchoolEn" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="From" class="form-label">Od</label>
+                        <input asp-for="From" class="form-control" type="date"/>
+                        <span asp-validation-for="From" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="To" class="form-label">Do (opcjonalnie)</label>
+                        <input asp-for="To" class="form-control" type="date"/>
+                        <span asp-validation-for="To" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-secondary">Zapisz</button>
+                    <a class="btn btn-outline-dark" asp-controller="Admin" asp-action="Education">Anuluj</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
