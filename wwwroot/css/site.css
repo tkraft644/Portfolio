@@ -1,6 +1,6 @@
 html {
   font-size: 14px;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 
 @media (min-width: 768px) {
@@ -200,7 +200,9 @@ body {
   background-color: var(--bg);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -276,10 +278,14 @@ body a:hover {
 /* === Kontener główny === */
 
 main[role="main"] {
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   background-color: var(--main-bg);
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Karty/sekcje, np. About, Projects, Contact */
