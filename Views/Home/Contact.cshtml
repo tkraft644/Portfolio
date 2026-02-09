@@ -20,13 +20,16 @@
                 @Localizer["Contact.EmailIntro"]
             </p>
 
-            <div class="d-flex align-items-center gap-3 mb-3">
-                <h4 class="fw-bold m-0">@Model.Info.Email</h4>
-
-                <a class="btn btn-outline-dark btn-sm"
-                   href="mailto:@Model.Info.Email?subject=@mailSubject">
-                    @Localizer["Contact.SendEmail"]
-                </a>
+            <div class="row g-2 align-items-center mb-3">
+                <div class="col-12 col-sm">
+                    <h4 class="fw-bold m-0 text-break">@Model.Info.Email</h4>
+                </div>
+                <div class="col-12 col-sm-auto">
+                    <a class="btn btn-outline-dark btn-sm w-100"
+                       href="mailto:@Model.Info.Email?subject=@mailSubject">
+                        @Localizer["Contact.SendEmail"]
+                    </a>
+                </div>
             </div>
 
             <p class="mt-4">
