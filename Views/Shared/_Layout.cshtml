@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Portfolio.styles.css" asp-append-version="true" />
+    <link rel="icon" type="image/png" href="~/img/logo-mark.png" asp-append-version="true" />
+    <link rel="apple-touch-icon" href="~/img/logo-mark.png" asp-append-version="true" />
     <script src="~/js/theme.js" asp-append-version="true" defer></script>
 </head>
 <body>
@@ -32,8 +34,18 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-vs border-bottom box-shadow">
         <div class="container-fluid">
-            <a class="navbar-brand vs-title" asp-area="" asp-controller="Home" asp-action="Index">
-                Tomasz Kraft Solutions
+            <a class="navbar-brand vs-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <img class="vs-logo vs-logo-full vs-logo-full-light"
+                     src="~/img/logo-full.png"
+                     alt="Tomasz Kraft Solutions"
+                     height="32"
+                     asp-append-version="true" />
+
+                <img class="vs-logo vs-logo-full vs-logo-full-dark"
+                     src="~/img/logo-full-white.png"
+                     alt="Tomasz Kraft Solutions"
+                     height="32"
+                     asp-append-version="true" />
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"

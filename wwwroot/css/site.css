@@ -264,6 +264,41 @@ body a:hover {
   letter-spacing: 0.02em;
 }
 
+.vs-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vs-logo {
+  display: block;
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
+.vs-logo-full-dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .vs-logo-full-light {
+    display: none;
+  }
+
+  :root:not([data-theme]) .vs-logo-full-dark {
+    display: block;
+  }
+}
+
+:root[data-theme="dark"] .vs-logo-full-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .vs-logo-full-dark {
+  display: block;
+}
+
 .vs-nav-link {
   color: var(--nav-link) !important;
   margin-right: 0.75rem;

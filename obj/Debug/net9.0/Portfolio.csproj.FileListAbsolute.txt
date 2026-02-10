@@ -2439,4 +2439,4 @@
 /Users/tomek/Documents/Portfolio/Portfolio/bin/Debug/net9.0/Portfolio.Tests/bin/Debug/net9.0/Portfolio.Tests/bin/Debug/net9.0/Portfolio.Tests/bin/Debug/net9.0/Portfolio.Tests/obj/Debug/net9.0/MvcTestingAppManifest.json
 /Users/tomek/Documents/Portfolio/Portfolio/bin/Debug/net9.0/Portfolio.Tests/bin/Debug/net9.0/Portfolio.Tests/bin/Debug/net9.0/Portfolio.Tests/bin/Debug/net9.0/Portfolio.Tests/obj/Release/net9.0/MvcTestingAppManifest.json
 /Users/tomek/Documents/Portfolio/Portfolio/bin/Debug/net9.0/Portfolio.Tests/bin/Debug/net9.0/Portfolio.Tests/bin/Debug/net9.0/Portfolio.Tests/bin/Debug/net9.0/Portfolio.Tests/obj/Release/net9.0/Portfolio.Tests.sourcelink.json
-/Users/tomek/Documents/Portfolio/Portfolio/obj/Debug/net9.0/compressed/22wp8f1e4x-0j4d03guzs.gz
+/Users/tomek/Documents/Portfolio/Portfolio/obj/Debug/net9.0/compressed/22wp8f1e4x-t18sr8yc3s.gz
