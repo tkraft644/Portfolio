@@ -22,7 +22,13 @@ services:
       - mssql
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      EmailSettings__Enabled: "false"
+      EmailSettings__Enabled: "${EMAIL_ENABLED:-false}"
+      EmailSettings__FromAddress: "${EMAIL_FROM_ADDRESS:-}"
+      EmailSettings__FromDisplayName: "${EMAIL_FROM_DISPLAY_NAME:-Tomasz Kraft}"
+      EmailSettings__Host: "${EMAIL_HOST:-ssl0.ovh.net}"
+      EmailSettings__Port: "${EMAIL_PORT:-587}"
+      EmailSettings__User: "${EMAIL_USER:-}"
+      EmailSettings__Password: "${EMAIL_PASSWORD:-}"
       Admin__Enabled: "${ADMIN_ENABLED:-false}"
       Admin__Password: "${ADMIN_PASSWORD:-}"
       ConnectionStrings__Portfolio: "Server=mssql,1433;Database=portfolio;User Id=sa;Password=${MSSQL_SA_PASSWORD:-Your_password123!};TrustServerCertificate=True"

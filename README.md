@@ -146,3 +146,12 @@ npm run build
 CV sending is controlled by `EmailSettings.Enabled` (default: `false`).
 
 For local secrets use user-secrets or environment variables; when enabled, Host/User/Password must be provided.
+
+In Docker Compose, configure SMTP in `.env`:
+- `EMAIL_ENABLED=true`
+- `EMAIL_FROM_ADDRESS=...`
+- `EMAIL_FROM_DISPLAY_NAME=...`
+- `EMAIL_HOST=...`
+- `EMAIL_PORT=587`
+- `EMAIL_USER=...`
+- `EMAIL_PASSWORD=...`
