@@ -494,15 +494,24 @@ main[role="main"] {
   border: 1px solid var(--panel-border);
   border-radius: 8px;
   padding: 0.9rem 0.9rem 0.5rem;
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: var(--panel-bg);
 }
 
 .dino-leaderboard-table {
   margin-bottom: 0;
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--text);
+  --bs-table-border-color: var(--panel-border);
+}
+
+.dino-leaderboard-table > :not(caption) > * > * {
+  background-color: transparent;
+  color: var(--text);
+  border-bottom-color: var(--panel-border);
 }
 
 .dino-leaderboard-table thead th {
-  border-bottom-color: var(--panel-border);
+  color: var(--card-subtitle);
   font-weight: 600;
 }
 
