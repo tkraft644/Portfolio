@@ -1,4 +1,4 @@
-namespace Portfolio.Models;
+namespace Portfolio.Models.Settings;
 
 public class EmailSettings
 {

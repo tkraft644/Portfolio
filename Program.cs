@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Portfolio.Data;
-using Portfolio.Models;
+using Portfolio.Models.Settings;
 using Portfolio.Observability;
 using Portfolio.Services;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -14,6 +14,8 @@ using System.Text.Json;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
+var isEfDesignTime = AppDomain.CurrentDomain.GetAssemblies()
+    .Any(x => string.Equals(x.GetName().Name, "Microsoft.EntityFrameworkCore.Design", StringComparison.Ordinal));
 
 builder.WebHost.ConfigureKestrel(options => { options.AddServerHeader = false; });
 
@@ -116,6 +118,7 @@ if (!string.IsNullOrWhiteSpace(portfolioDbConnectionString))
             portfolioDbConnectionString,
             sql => sql.EnableRetryOnFailure()));
 
+    builder.Services.AddScoped<PortfolioDbMigrator>();
     builder.Services.AddScoped<PortfolioDbSeeder>();
     builder.Services.AddScoped<IPortfolioContentService, EfCorePortfolioContentService>();
 }
@@ -126,9 +129,14 @@ else
 
 var app = builder.Build();
 
-if (!app.Environment.IsEnvironment("Testing") && !string.IsNullOrWhiteSpace(portfolioDbConnectionString))
+if (!isEfDesignTime &&
+    !app.Environment.IsEnvironment("Testing") &&
+    !string.IsNullOrWhiteSpace(portfolioDbConnectionString))
 {
     using var scope = app.Services.CreateScope();
+    var migrator = scope.ServiceProvider.GetRequiredService<PortfolioDbMigrator>();
+    await migrator.MigrateAsync();
+
     var seeder = scope.ServiceProvider.GetRequiredService<PortfolioDbSeeder>();
     await seeder.SeedAsync();
 }
@@ -250,7 +258,10 @@ if (Directory.Exists(angularBrowserRoot))
     });
 }
 
-app.Run();
+if (!isEfDesignTime)
+{
+    app.Run();
+}
 
 static Task WriteHealthResponse(HttpContext context, Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report)
 {

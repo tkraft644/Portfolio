@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
-using Portfolio.Models;
+using Portfolio.Models.Settings;
 using Portfolio.Observability;
 
 namespace Portfolio.Services;

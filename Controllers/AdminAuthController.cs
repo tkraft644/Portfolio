@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Portfolio.Models;
+using Portfolio.Models.Settings;
 
 namespace Portfolio.Controllers;
 

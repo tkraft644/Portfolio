@@ -28,3 +28,8 @@ appsettings.*.local.json
 
 # Local env vars (Docker Compose)
 .env
+
+# Local dotnet caches used in this repo
+.dotnet_home/
+.nuget_http/
+.nuget_plugins/

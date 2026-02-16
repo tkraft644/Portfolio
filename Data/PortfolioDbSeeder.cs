@@ -21,8 +21,6 @@ public sealed class PortfolioDbSeeder
         {
             try
             {
-                await _db.Database.EnsureCreatedAsync(cancellationToken);
-
                 if (await _db.Profiles.AnyAsync(cancellationToken))
                 {
                     return;
@@ -306,4 +304,3 @@ public sealed class PortfolioDbSeeder
             Name = name
         };
 }
-

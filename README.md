@@ -22,7 +22,7 @@ Then open:
 - `http://localhost:8080/` (MVC views)
 - `http://localhost:8080/app/` (Angular SPA demo)
 
-The app uses **EF Core + SQL Server** in Docker Compose and seeds the database on first run.
+The app uses **EF Core + SQL Server** in Docker Compose, applies migrations on startup, and seeds default data only when profile data is missing.
 
 SQL Server is bound to `127.0.0.1:1433` (localhost only) by default.
 
@@ -32,8 +32,17 @@ docker build -t portfolio .
 docker run --rm -p 8080:8080 -e ASPNETCORE_ENVIRONMENT=Production -e EmailSettings__Enabled=false portfolio
 ```
 
-## Database (EF Core + SQL Server)
-If `ConnectionStrings:Portfolio` is set, the app reads portfolio content from SQL Server via EF Core and seeds it automatically.
+## Database (EF Core + SQL Server + Migrations)
+If `ConnectionStrings:Portfolio` is set, the app reads portfolio content from SQL Server via EF Core.
+
+Startup flow:
+- applies pending EF Core migrations (`Database.Migrate()`),
+- then runs seeding (only when database is empty).
+
+For older databases created with `EnsureCreated`, startup performs a one-time baseline:
+- if portfolio tables exist but `__EFMigrationsHistory` is missing,
+- the app marks the initial migration as already applied,
+- then uses normal EF migrations from that point on (without data loss).
 
 - Docker Compose sets the connection string automatically (service name `mssql`).
 - For local run you can point it at your own SQL Server instance:
@@ -45,6 +54,16 @@ To open the database in a GUI client:
 - User: `sa`
 - Password: value of `MSSQL_SA_PASSWORD` from your `.env`
 - Database: `portfolio` (optional; can connect to `master` too)
+
+### Creating a new migration (developer workflow)
+```bash
+dotnet ef migrations add <MigrationName> --project Portfolio.csproj --startup-project Portfolio.csproj --output-dir Data/Migrations
+```
+
+Applying migrations manually:
+```bash
+dotnet ef database update --project Portfolio.csproj --startup-project Portfolio.csproj
+```
 
 ## Admin panel (internal)
 There is a small internal admin UI for editing portfolio data stored in SQL Server.

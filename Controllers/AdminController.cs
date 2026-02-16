@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Portfolio.Data;
 using Portfolio.Data.Entities;
 using Portfolio.Models;
+using Portfolio.Models.Settings;
 using System.Globalization;
 
 namespace Portfolio.Controllers;
