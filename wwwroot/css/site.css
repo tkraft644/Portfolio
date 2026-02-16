@@ -490,6 +490,42 @@ main[role="main"] {
   color: rgba(255, 255, 255, 0.75) !important;
 }
 
+.dino-leaderboard {
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 0.9rem 0.9rem 0.5rem;
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.dino-leaderboard-table {
+  margin-bottom: 0;
+}
+
+.dino-leaderboard-table thead th {
+  border-bottom-color: var(--panel-border);
+  font-weight: 600;
+}
+
+.dino-leaderboard-table td {
+  color: var(--text);
+  border-color: var(--panel-border);
+}
+
+.dino-leaderboard-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.dino-record-modal-content {
+  background-color: var(--panel-bg);
+  border-color: var(--panel-border);
+  color: var(--text);
+}
+
+.dino-record-modal-content .modal-header,
+.dino-record-modal-content .modal-footer {
+  border-color: var(--panel-border);
+}
+
 .container-max-700 { max-width: 700px; }
 .container-max-900 { max-width: 900px; }
 .container-max-1000 { max-width: 1000px; }

@@ -21,11 +21,39 @@
   const bestEl = document.querySelector('[data-dino-best]');
   const restartBtn = document.querySelector('[data-dino-restart]');
 
+  const apiConfig = document.querySelector('[data-dino-api-config]');
+  const leaderboardBody = document.querySelector('[data-dino-leaderboard-body]');
+  const leaderboardStatusEl = document.querySelector('[data-dino-leaderboard-status]');
+
+  const recordModal = document.querySelector('[data-dino-record-modal]');
+  const recordModalText = recordModal?.querySelector('[data-dino-record-modal-text]');
+  const recordForm = recordModal?.querySelector('[data-dino-record-form]');
+  const recordNameInput = recordModal?.querySelector('[data-dino-record-name]');
+  const recordValidation = recordModal?.querySelector('[data-dino-record-validation]');
+  const recordSaveBtn = recordModal?.querySelector('[data-dino-record-save]');
+
   const WORLD_WIDTH = 900;
   const WORLD_HEIGHT = 240;
   const GROUND_Y = 190;
+  const LEADERBOARD_LIMIT = 10;
 
   const STORAGE_KEY_BEST = 'portfolio_dino_best';
+  const STORAGE_KEY_PLAYER_NAME = 'portfolio_dino_player_name';
+
+  const leaderboardUrl = (apiConfig?.getAttribute('data-leaderboard-url') || '/api/fun/leaderboard').trim();
+  const submitUrl = (apiConfig?.getAttribute('data-submit-url') || '/api/fun/leaderboard').trim();
+
+  const leaderboardLoadingText = leaderboardBody?.getAttribute('data-loading') || 'Loading results...';
+  const leaderboardEmptyText = leaderboardBody?.getAttribute('data-empty') || 'No records yet.';
+  const leaderboardErrorText = leaderboardBody?.getAttribute('data-error') || 'Could not load leaderboard.';
+
+  const recordPromptText = recordModal?.getAttribute('data-prompt') || 'Add your score to leaderboard?';
+  const recordScorePrefix = recordModal?.getAttribute('data-score-prefix') || 'Score';
+  const recordValidationText = recordModal?.getAttribute('data-validation') || 'Enter at least 2 characters.';
+  const recordSaveErrorText = recordModal?.getAttribute('data-save-error') || 'Could not save score. Try again.';
+  const recordSaveSuccessText = recordModal?.getAttribute('data-save-success') || 'Score saved in leaderboard.';
+  const recordSaveButtonLabel = recordModal?.getAttribute('data-save-label') || 'Save';
+  const recordSavingButtonLabel = recordModal?.getAttribute('data-saving-label') || 'Saving...';
 
   const DINO = {
     x: 92,
@@ -55,6 +83,13 @@
   /** @type {{text:string,accent:string,border:string}|null} */
   let themeColors = null;
 
+  /** @type {bootstrap.Modal | null} */
+  let recordModalInstance = null;
+
+  let isModalOpen = false;
+  let isSubmittingScore = false;
+  let pendingScoreToSubmit = null;
+
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
   }
@@ -76,6 +111,22 @@
   function writeBest(value) {
     try {
       localStorage.setItem(STORAGE_KEY_BEST, String(Math.floor(value)));
+    } catch {
+      // ignore
+    }
+  }
+
+  function readPlayerName() {
+    try {
+      return (localStorage.getItem(STORAGE_KEY_PLAYER_NAME) || '').trim();
+    } catch {
+      return '';
+    }
+  }
+
+  function writePlayerName(value) {
+    try {
+      localStorage.setItem(STORAGE_KEY_PLAYER_NAME, value);
     } catch {
       // ignore
     }
@@ -170,11 +221,9 @@
     roundRect(x, y, DINO.w, DINO.h, 6);
     ctx.fill();
 
-    // Eye
     ctx.fillStyle = colors.accent;
     ctx.fillRect(x + 23, y + 10, 4, 4);
 
-    // Legs (simple animation)
     ctx.fillStyle = colors.text;
     const legY = y + DINO.h - 6;
     const legA = stepPhase ? 2 : 0;
@@ -186,11 +235,9 @@
     const colors = themeColors ?? (themeColors = readThemeColors());
     ctx.fillStyle = colors.text;
 
-    // Body
     roundRect(ob.x, ob.y, ob.w, ob.h, 6);
     ctx.fill();
 
-    // Arms (optional)
     if (ob.arm) {
       const armW = Math.max(10, Math.floor(ob.w * 0.55));
       const armH = Math.max(10, Math.floor(ob.h * 0.20));
@@ -214,6 +261,250 @@
   function updateHud(score, best) {
     if (scoreEl instanceof HTMLElement) scoreEl.textContent = String(Math.floor(score));
     if (bestEl instanceof HTMLElement) bestEl.textContent = String(Math.floor(best));
+  }
+
+  function normalizePlayerName(rawValue) {
+    if (typeof rawValue !== 'string') {
+      return '';
+    }
+
+    const compact = rawValue
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 80);
+
+    return compact;
+  }
+
+  function setLeaderboardStatus(message, isError) {
+    if (!(leaderboardStatusEl instanceof HTMLElement)) {
+      return;
+    }
+
+    leaderboardStatusEl.textContent = message || '';
+    leaderboardStatusEl.classList.toggle('text-danger', Boolean(isError));
+    leaderboardStatusEl.classList.toggle('text-success', Boolean(message) && !isError);
+  }
+
+  function renderLeaderboardMessage(message) {
+    if (!(leaderboardBody instanceof HTMLTableSectionElement)) {
+      return;
+    }
+
+    const row = document.createElement('tr');
+    const cell = document.createElement('td');
+    cell.colSpan = 4;
+    cell.className = 'text-center text-muted py-3';
+    cell.textContent = message;
+    row.appendChild(cell);
+
+    leaderboardBody.innerHTML = '';
+    leaderboardBody.appendChild(row);
+  }
+
+  function formatLeaderboardDate(value) {
+    if (!value) {
+      return '—';
+    }
+
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      return '—';
+    }
+
+    return parsed.toLocaleString();
+  }
+
+  function renderLeaderboardRows(entries) {
+    if (!(leaderboardBody instanceof HTMLTableSectionElement)) {
+      return;
+    }
+
+    leaderboardBody.innerHTML = '';
+    if (!Array.isArray(entries) || entries.length === 0) {
+      renderLeaderboardMessage(leaderboardEmptyText);
+      return;
+    }
+
+    for (let index = 0; index < entries.length; index += 1) {
+      const entry = entries[index];
+      const row = document.createElement('tr');
+
+      const rankCell = document.createElement('td');
+      rankCell.className = 'fw-semibold';
+      rankCell.textContent = String(Number(entry.rank) || index + 1);
+
+      const playerCell = document.createElement('td');
+      playerCell.textContent = String(entry.playerName || '—');
+
+      const scoreCell = document.createElement('td');
+      scoreCell.className = 'text-end fw-semibold';
+      scoreCell.textContent = String(Math.max(0, Math.floor(Number(entry.score) || 0)));
+
+      const whenCell = document.createElement('td');
+      whenCell.className = 'small text-muted';
+      whenCell.textContent = formatLeaderboardDate(entry.createdAtUtc);
+
+      row.append(rankCell, playerCell, scoreCell, whenCell);
+      leaderboardBody.appendChild(row);
+    }
+  }
+
+  function buildLeaderboardUrl(limit) {
+    try {
+      const url = new URL(leaderboardUrl, window.location.origin);
+      url.searchParams.set('limit', String(limit));
+      return url.toString();
+    } catch {
+      return `${leaderboardUrl}?limit=${encodeURIComponent(String(limit))}`;
+    }
+  }
+
+  async function loadLeaderboard() {
+    renderLeaderboardMessage(leaderboardLoadingText);
+
+    try {
+      const response = await fetch(buildLeaderboardUrl(LEADERBOARD_LIMIT), {
+        method: 'GET',
+        headers: { Accept: 'application/json' },
+        cache: 'no-store'
+      });
+
+      if (!response.ok) {
+        throw new Error(`Leaderboard HTTP ${response.status}`);
+      }
+
+      const entries = await response.json();
+      renderLeaderboardRows(entries);
+    } catch {
+      renderLeaderboardMessage(leaderboardErrorText);
+    }
+  }
+
+  function clearModalValidation() {
+    if (recordNameInput instanceof HTMLElement) {
+      recordNameInput.classList.remove('is-invalid');
+    }
+    if (recordValidation instanceof HTMLElement) {
+      recordValidation.textContent = '';
+    }
+  }
+
+  function showModalValidation(message) {
+    if (recordNameInput instanceof HTMLElement) {
+      recordNameInput.classList.add('is-invalid');
+    }
+    if (recordValidation instanceof HTMLElement) {
+      recordValidation.textContent = message;
+    }
+  }
+
+  function setRecordSaveBusy(isBusy) {
+    isSubmittingScore = isBusy;
+    if (recordSaveBtn instanceof HTMLButtonElement) {
+      recordSaveBtn.disabled = isBusy;
+      recordSaveBtn.textContent = isBusy ? recordSavingButtonLabel : recordSaveButtonLabel;
+    }
+  }
+
+  async function postLeaderboardEntry(playerName, scoreValue) {
+    const response = await fetch(submitUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        playerName,
+        score: scoreValue
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Submit HTTP ${response.status}`);
+    }
+  }
+
+  async function submitScoreFromModal() {
+    if (isSubmittingScore || pendingScoreToSubmit === null) {
+      return;
+    }
+
+    const nameValue = normalizePlayerName(recordNameInput instanceof HTMLInputElement ? recordNameInput.value : '');
+    if (nameValue.length < 2) {
+      showModalValidation(recordValidationText);
+      return;
+    }
+
+    clearModalValidation();
+    setRecordSaveBusy(true);
+
+    try {
+      await postLeaderboardEntry(nameValue, pendingScoreToSubmit);
+      writePlayerName(nameValue);
+      pendingScoreToSubmit = null;
+      setLeaderboardStatus(recordSaveSuccessText, false);
+      await loadLeaderboard();
+
+      if (recordModalInstance) {
+        recordModalInstance.hide();
+      }
+    } catch {
+      setLeaderboardStatus(recordSaveErrorText, true);
+      showModalValidation(recordSaveErrorText);
+    } finally {
+      setRecordSaveBusy(false);
+    }
+  }
+
+  async function promptAndSubmitFallback(scoreValue) {
+    const shouldSave = window.confirm(recordPromptText);
+    if (!shouldSave) {
+      return;
+    }
+
+    const suggestedName = readPlayerName();
+    const rawName = window.prompt(`${recordScorePrefix}: ${scoreValue}`, suggestedName) || '';
+    const normalized = normalizePlayerName(rawName);
+    if (normalized.length < 2) {
+      setLeaderboardStatus(recordValidationText, true);
+      return;
+    }
+
+    try {
+      await postLeaderboardEntry(normalized, scoreValue);
+      writePlayerName(normalized);
+      setLeaderboardStatus(recordSaveSuccessText, false);
+      await loadLeaderboard();
+    } catch {
+      setLeaderboardStatus(recordSaveErrorText, true);
+    }
+  }
+
+  function promptToSaveRecord(scoreValue) {
+    const safeScore = Math.max(1, Math.floor(scoreValue));
+    if (safeScore <= 0) {
+      return;
+    }
+
+    if (!(recordModal instanceof HTMLElement) || !recordModalInstance) {
+      void promptAndSubmitFallback(safeScore);
+      return;
+    }
+
+    pendingScoreToSubmit = safeScore;
+    clearModalValidation();
+    setRecordSaveBusy(false);
+
+    if (recordModalText instanceof HTMLElement) {
+      recordModalText.textContent = `${recordPromptText} ${recordScorePrefix}: ${safeScore}`;
+    }
+
+    if (recordNameInput instanceof HTMLInputElement) {
+      recordNameInput.value = readPlayerName();
+    }
+
+    recordModalInstance.show();
   }
 
   let bestScore = readBest();
@@ -271,13 +562,20 @@
     running = false;
     gameOver = true;
 
-    if (score > bestScore) {
-      bestScore = Math.floor(score);
+    const finalScore = Math.floor(score);
+    const isNewPersonalBest = finalScore > bestScore;
+
+    if (isNewPersonalBest) {
+      bestScore = finalScore;
       writeBest(bestScore);
     }
 
-    updateHud(score, bestScore);
+    updateHud(finalScore, bestScore);
     applyOverlayText('gameover');
+
+    if (isNewPersonalBest) {
+      promptToSaveRecord(finalScore);
+    }
   }
 
   function togglePause() {
@@ -319,7 +617,6 @@
     score += dt * 10;
     speed = clamp(SPEED.base + score * SPEED.ramp, SPEED.base, SPEED.max);
 
-    // Dino physics
     dinoVy += PHYSICS.gravity * dt;
     dinoY += dinoVy * dt;
     if (dinoY >= GROUND_Y - DINO.h) {
@@ -328,7 +625,6 @@
       onGround = true;
     }
 
-    // Obstacles
     for (const ob of obstacles) {
       ob.x -= speed * dt;
     }
@@ -342,7 +638,6 @@
       spawnObstacle();
     }
 
-    // Simple step animation
     if (onGround) {
       stepAccum += dt * (speed / 220);
       if (stepAccum >= 0.25) {
@@ -351,7 +646,6 @@
       }
     }
 
-    // Collision detection
     const dinoRect = {
       x: DINO.x + 2,
       y: dinoY + 2,
@@ -386,7 +680,6 @@
 
     drawDino({ dinoY }, stepPhase);
 
-    // Small score on canvas (top-right)
     const colors = themeColors ?? (themeColors = readThemeColors());
     ctx.fillStyle = colors.text;
     ctx.font = '16px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace';
@@ -410,6 +703,10 @@
   }
 
   function handleAction() {
+    if (isModalOpen) {
+      return;
+    }
+
     if (gameOver || !running) {
       startGame();
       return;
@@ -429,14 +726,13 @@
     updateHud(0, bestScore);
   }
 
-  // Events
   container.addEventListener('pointerdown', (e) => {
-    if (e.button !== 0) return;
+    if (e.button !== 0 || isModalOpen) return;
     handleAction();
   });
 
   window.addEventListener('keydown', (e) => {
-    if (isTypingTarget(e.target)) return;
+    if (isModalOpen || isTypingTarget(e.target)) return;
 
     const key = e.key;
     if (key === ' ' || key === 'ArrowUp') {
@@ -460,9 +756,50 @@
     restartBtn.addEventListener('click', () => restart());
   }
 
+  if (
+    recordModal instanceof HTMLElement &&
+    window.bootstrap &&
+    typeof window.bootstrap.Modal === 'function'
+  ) {
+    recordModalInstance = window.bootstrap.Modal.getOrCreateInstance(recordModal, {
+      backdrop: 'static'
+    });
+
+    recordModal.addEventListener('shown.bs.modal', () => {
+      isModalOpen = true;
+      if (recordNameInput instanceof HTMLInputElement) {
+        recordNameInput.focus();
+        recordNameInput.select();
+      }
+    });
+
+    recordModal.addEventListener('hidden.bs.modal', () => {
+      isModalOpen = false;
+      pendingScoreToSubmit = null;
+      clearModalValidation();
+      setRecordSaveBusy(false);
+    });
+  }
+
+  if (recordForm instanceof HTMLFormElement) {
+    recordForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      void submitScoreFromModal();
+    });
+  }
+
+  if (recordSaveBtn instanceof HTMLButtonElement) {
+    recordSaveBtn.addEventListener('click', () => {
+      void submitScoreFromModal();
+    });
+  }
+
+  if (recordNameInput instanceof HTMLInputElement) {
+    recordNameInput.addEventListener('input', () => clearModalValidation());
+  }
+
   window.addEventListener('resize', () => resizeCanvas());
 
-  // Update theme colors when the toggle changes.
   try {
     const observer = new MutationObserver(() => {
       themeColors = readThemeColors();
@@ -480,10 +817,9 @@
     // ignore
   }
 
-  // Init
   themeColors = readThemeColors();
   resizeCanvas();
   applyOverlayText('start');
+  void loadLeaderboard();
   requestAnimationFrame(loop);
 })();
-

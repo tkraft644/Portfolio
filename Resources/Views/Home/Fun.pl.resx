@@ -48,5 +48,64 @@
   <data name="Fun.OverlayTitle" xml:space="preserve">
     <value>Mini gra</value>
   </data>
+  <data name="Fun.LeaderboardTitle" xml:space="preserve">
+    <value>Tabela rekordów</value>
+  </data>
+  <data name="Fun.LeaderboardSubtitle" xml:space="preserve">
+    <value>Top 10 wyników</value>
+  </data>
+  <data name="Fun.LeaderboardPlace" xml:space="preserve">
+    <value>#</value>
+  </data>
+  <data name="Fun.LeaderboardPlayer" xml:space="preserve">
+    <value>Gracz</value>
+  </data>
+  <data name="Fun.LeaderboardScore" xml:space="preserve">
+    <value>Wynik</value>
+  </data>
+  <data name="Fun.LeaderboardWhen" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Fun.LeaderboardLoading" xml:space="preserve">
+    <value>Ładowanie wyników...</value>
+  </data>
+  <data name="Fun.LeaderboardEmpty" xml:space="preserve">
+    <value>Brak rekordów.</value>
+  </data>
+  <data name="Fun.LeaderboardError" xml:space="preserve">
+    <value>Nie udało się pobrać tabeli rekordów.</value>
+  </data>
+  <data name="Fun.RecordModalTitle" xml:space="preserve">
+    <value>Nowy rekord osobisty</value>
+  </data>
+  <data name="Fun.RecordModalPrompt" xml:space="preserve">
+    <value>Pobiłeś swój rekord. Dodać wynik do tabeli rekordów?</value>
+  </data>
+  <data name="Fun.RecordModalScorePrefix" xml:space="preserve">
+    <value>Wynik</value>
+  </data>
+  <data name="Fun.RecordModalNameLabel" xml:space="preserve">
+    <value>Nick lub imię i nazwisko</value>
+  </data>
+  <data name="Fun.RecordModalNamePlaceholder" xml:space="preserve">
+    <value>np. Tomek</value>
+  </data>
+  <data name="Fun.RecordModalValidation" xml:space="preserve">
+    <value>Wpisz minimum 2 znaki.</value>
+  </data>
+  <data name="Fun.RecordModalSave" xml:space="preserve">
+    <value>Zapisz wynik</value>
+  </data>
+  <data name="Fun.RecordModalSaving" xml:space="preserve">
+    <value>Zapisywanie...</value>
+  </data>
+  <data name="Fun.RecordModalCancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="Fun.RecordModalSaveError" xml:space="preserve">
+    <value>Nie udało się zapisać wyniku. Spróbuj ponownie.</value>
+  </data>
+  <data name="Fun.RecordModalSaved" xml:space="preserve">
+    <value>Wynik zapisany w tabeli rekordów.</value>
+  </data>
 </root>
-

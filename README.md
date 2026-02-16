@@ -84,6 +84,15 @@ Admin pages:
 - `GET /admin/technologies`
 - `GET /admin/social-links`
 
+## Fun leaderboard
+- The mini-game (`/Home/Fun`) stores leaderboard entries in SQL table `PortfolioGameScores`.
+- API endpoints:
+  - `GET /api/fun/leaderboard?limit=10`
+  - `POST /api/fun/leaderboard` with JSON body:
+    - `playerName` (2-80 chars)
+    - `score` (> 0)
+- The submit endpoint is rate-limited per IP (`fun-leaderboard-submit` policy).
+
 ## Run (backend)
 ```bash
 dotnet run

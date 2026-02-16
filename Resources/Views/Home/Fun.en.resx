@@ -48,5 +48,64 @@
   <data name="Fun.OverlayTitle" xml:space="preserve">
     <value>Mini game</value>
   </data>
+  <data name="Fun.LeaderboardTitle" xml:space="preserve">
+    <value>Leaderboard</value>
+  </data>
+  <data name="Fun.LeaderboardSubtitle" xml:space="preserve">
+    <value>Top 10 results</value>
+  </data>
+  <data name="Fun.LeaderboardPlace" xml:space="preserve">
+    <value>#</value>
+  </data>
+  <data name="Fun.LeaderboardPlayer" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="Fun.LeaderboardScore" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="Fun.LeaderboardWhen" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Fun.LeaderboardLoading" xml:space="preserve">
+    <value>Loading results...</value>
+  </data>
+  <data name="Fun.LeaderboardEmpty" xml:space="preserve">
+    <value>No records yet.</value>
+  </data>
+  <data name="Fun.LeaderboardError" xml:space="preserve">
+    <value>Could not load leaderboard.</value>
+  </data>
+  <data name="Fun.RecordModalTitle" xml:space="preserve">
+    <value>New personal best</value>
+  </data>
+  <data name="Fun.RecordModalPrompt" xml:space="preserve">
+    <value>You beat your personal record. Add your score to leaderboard?</value>
+  </data>
+  <data name="Fun.RecordModalScorePrefix" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="Fun.RecordModalNameLabel" xml:space="preserve">
+    <value>Nickname or name</value>
+  </data>
+  <data name="Fun.RecordModalNamePlaceholder" xml:space="preserve">
+    <value>e.g. Tomek</value>
+  </data>
+  <data name="Fun.RecordModalValidation" xml:space="preserve">
+    <value>Enter at least 2 characters.</value>
+  </data>
+  <data name="Fun.RecordModalSave" xml:space="preserve">
+    <value>Save score</value>
+  </data>
+  <data name="Fun.RecordModalSaving" xml:space="preserve">
+    <value>Saving...</value>
+  </data>
+  <data name="Fun.RecordModalCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Fun.RecordModalSaveError" xml:space="preserve">
+    <value>Could not save score. Try again.</value>
+  </data>
+  <data name="Fun.RecordModalSaved" xml:space="preserve">
+    <value>Score saved in leaderboard.</value>
+  </data>
 </root>
-

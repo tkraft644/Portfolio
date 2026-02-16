@@ -19,6 +19,7 @@ public class PortfolioDbContext : DbContext
     public DbSet<PortfolioProjectEntity> Projects => Set<PortfolioProjectEntity>();
     public DbSet<PortfolioProjectTechnologyEntity> ProjectTechnologies => Set<PortfolioProjectTechnologyEntity>();
     public DbSet<PortfolioChallengeEntity> Challenges => Set<PortfolioChallengeEntity>();
+    public DbSet<PortfolioGameScoreEntity> GameScores => Set<PortfolioGameScoreEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -134,6 +135,23 @@ public class PortfolioDbContext : DbContext
             .Property(x => x.TextEn)
             .HasMaxLength(600)
             .IsRequired();
+
+        modelBuilder.Entity<PortfolioGameScoreEntity>().ToTable("PortfolioGameScores");
+        modelBuilder.Entity<PortfolioGameScoreEntity>()
+            .Property(x => x.PlayerName)
+            .HasMaxLength(80)
+            .IsRequired();
+        modelBuilder.Entity<PortfolioGameScoreEntity>()
+            .Property(x => x.Score)
+            .IsRequired();
+        modelBuilder.Entity<PortfolioGameScoreEntity>()
+            .Property(x => x.CreatedAtUtc)
+            .HasColumnType("datetime2")
+            .IsRequired();
+        modelBuilder.Entity<PortfolioGameScoreEntity>()
+            .HasIndex(x => x.Score);
+        modelBuilder.Entity<PortfolioGameScoreEntity>()
+            .HasIndex(x => x.CreatedAtUtc);
 
         modelBuilder.Entity<PortfolioProjectEntity>()
             .HasMany(x => x.Technologies)

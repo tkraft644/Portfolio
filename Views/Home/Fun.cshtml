@@ -10,6 +10,10 @@
             <h1 class="mb-2">@Localizer["Fun.Heading"]</h1>
             <p class="text-muted mb-4">@Localizer["Fun.Subtitle"]</p>
 
+            <div data-dino-api-config
+                 data-leaderboard-url="@Url.Content("~/api/fun/leaderboard")"
+                 data-submit-url="@Url.Content("~/api/fun/leaderboard")"></div>
+
             <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
                 <span class="badge bg-secondary">
                     @Localizer["Fun.Score"]: <span data-dino-score>0</span>
@@ -40,6 +44,75 @@
                     <div class="small text-muted mt-2">@Localizer["Fun.Controls"]</div>
                 </div>
             </div>
+
+            <div class="dino-leaderboard mt-4">
+                <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-2">
+                    <h2 class="h5 mb-0">@Localizer["Fun.LeaderboardTitle"]</h2>
+                    <span class="small text-muted">@Localizer["Fun.LeaderboardSubtitle"]</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle dino-leaderboard-table mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-muted">@Localizer["Fun.LeaderboardPlace"]</th>
+                                <th scope="col" class="text-muted">@Localizer["Fun.LeaderboardPlayer"]</th>
+                                <th scope="col" class="text-muted text-end">@Localizer["Fun.LeaderboardScore"]</th>
+                                <th scope="col" class="text-muted">@Localizer["Fun.LeaderboardWhen"]</th>
+                            </tr>
+                        </thead>
+                        <tbody data-dino-leaderboard-body
+                               data-loading="@Localizer["Fun.LeaderboardLoading"]"
+                               data-empty="@Localizer["Fun.LeaderboardEmpty"]"
+                               data-error="@Localizer["Fun.LeaderboardError"]">
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-3">@Localizer["Fun.LeaderboardLoading"]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="small mt-2 text-muted" data-dino-leaderboard-status></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade"
+     id="dino-record-modal"
+     tabindex="-1"
+     aria-hidden="true"
+     data-dino-record-modal
+     data-prompt="@Localizer["Fun.RecordModalPrompt"]"
+     data-score-prefix="@Localizer["Fun.RecordModalScorePrefix"]"
+     data-validation="@Localizer["Fun.RecordModalValidation"]"
+     data-save-error="@Localizer["Fun.RecordModalSaveError"]"
+     data-save-success="@Localizer["Fun.RecordModalSaved"]"
+     data-save-label="@Localizer["Fun.RecordModalSave"]"
+     data-saving-label="@Localizer["Fun.RecordModalSaving"]">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content dino-record-modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fs-5">@Localizer["Fun.RecordModalTitle"]</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@Localizer["Fun.RecordModalCancel"]"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3" data-dino-record-modal-text></p>
+                <form data-dino-record-form novalidate>
+                    <label class="form-label" for="dino-player-name">@Localizer["Fun.RecordModalNameLabel"]</label>
+                    <input type="text"
+                           id="dino-player-name"
+                           class="form-control"
+                           maxlength="80"
+                           autocomplete="nickname"
+                           placeholder="@Localizer["Fun.RecordModalNamePlaceholder"]"
+                           data-dino-record-name />
+                    <div class="invalid-feedback" data-dino-record-validation></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Fun.RecordModalCancel"]</button>
+                <button type="button" class="btn btn-primary" data-dino-record-save>@Localizer["Fun.RecordModalSave"]</button>
+            </div>
         </div>
     </div>
 </div>
@@ -47,4 +120,3 @@
 @section Scripts {
     <script src="~/js/dino.js" asp-append-version="true" defer></script>
 }
-
