@@ -71,7 +71,7 @@ There is a small internal admin UI for editing portfolio data stored in SQL Serv
 - By default it is disabled (`Admin:Enabled=false`) and returns 404.
 - Enable it via environment variables:
   - `Admin__Enabled=true`
-  - `Admin__Password=NikonD5300@`
+  - `Admin__Password=...`
 - Open `http://localhost:8080/admin/login` and log in.
 
 In Docker Compose you can enable it via `.env`:
