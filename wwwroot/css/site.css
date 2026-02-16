@@ -510,6 +510,11 @@ main[role="main"] {
   border-bottom-color: var(--panel-border);
 }
 
+.dino-leaderboard .text-muted,
+.dino-leaderboard-table .text-muted {
+  color: var(--card-subtitle) !important;
+}
+
 .dino-leaderboard-table thead th {
   color: var(--card-subtitle);
   font-weight: 600;
